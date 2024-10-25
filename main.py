@@ -3,6 +3,7 @@ import sys
 from pacman import ejecutar_Juego
 # Iniciar programa
 
+
 pygame.init()
 
 # Definicion de colores
@@ -13,14 +14,15 @@ AMARILLO = (255, 255, 0)
 
 # Pantalla
 
-pantalla = pygame.display.set_mode((900, 950))
+pantalla = pygame.display.set_mode((750, 800))
 pygame.display.set_caption("Pacman Menu")
 
-fuente = pygame.font.SysFont("Impact regular", 55)
+fuente = pygame.font.Font('Recursos/Fuentes/whimsytt.ttf', 35)
 
-opcionesMenu = ["Jugar", "Modo de Juego: Clasico", "Salir"]
+opcionesMenu = ["Jugar", "Modo de Juego: Clasico", "Silenciar musica: no","Salir"]
 opcionSeleccionada = 0
 modoDeJuego = "Clasico"
+musica_Activada = True
 
 imagenTituloClasico = pygame.image.load('Recursos/Menus/PacmanTitulo.png')
 imagenTituloTigre = pygame.image.load('Recursos/Menus/PacmanMondeVil.png')
@@ -48,6 +50,17 @@ def cambiarModoDeJuego():
 
 opcionesMenu[1] = f"Modo de Juego: {modoDeJuego}"
 
+def silenciar():
+    global musica_Activada
+    if musica_Activada:
+        pygame.mixer.music.pause()
+        opcionesMenu[2] = "Silenciar musica: si" 
+    else:
+        pygame.mixer.music.unpause()
+        opcionesMenu[2] = "Silenciar musica: no"
+    musica_Activada = not musica_Activada    
+
+
 def menu():
     pantalla.fill(NEGRO)
 
@@ -58,7 +71,7 @@ def menu():
         color = AMARILLO if i == opcionSeleccionada else BLANCO
         textoSuperficie = fuente.render(opcion, True, color)
 
-        textoRect = textoSuperficie.get_rect(center=(pantalla.get_width() // 2, 450 + i * 100))
+        textoRect = textoSuperficie.get_rect(center=(pantalla.get_width() // 2, 350 + i * 100))
         pantalla.blit(textoSuperficie, textoRect)
 
     
@@ -93,7 +106,9 @@ def menuPrincipal():
                      elif opcionSeleccionada == 1:  # Cambiar modo de juego
                          cambiarModoDeJuego()
                          opcionesMenu[1] = f"Modo de Juego: {modoDeJuego}"
-                     elif opcionSeleccionada == 2:  # Salir
+                     elif opcionSeleccionada == 2: #silenciar musica
+                         silenciar()
+                     elif opcionSeleccionada == 3:  # Salir
                          pygame.quit()
                          sys.exit()
 
