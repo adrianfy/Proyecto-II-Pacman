@@ -1,6 +1,6 @@
 import pygame
 import sys
-from pacman import ejecutar_Juego
+from controladorJuego import ejecutar_Juego
 # Iniciar programa
 
 
@@ -17,7 +17,7 @@ AMARILLO = (255, 255, 0)
 pantalla = pygame.display.set_mode((750, 800))
 pygame.display.set_caption("Pacman Menu")
 
-fuente = pygame.font.Font('Recursos/Fuentes/whimsytt.ttf', 35)
+fuente = pygame.font.Font('Recursos/Fuentes/PressStart2P-Regular.ttf', 35)
 
 opcionesMenu = ["Jugar", "Modo de Juego: Clasico", "Silenciar musica: no","Salir"]
 opcionSeleccionada = 0
