@@ -2,10 +2,12 @@ import pygame
 from pygame.locals import *
 from vector import Vector
 from constantes import *
+from entidad import Entidad
 
-class Pacman(object):
+class Pacman(Entidad):
     def __init__(self, nodo):
         self.nombre = PACMAN
+        self.color = AMARILLO
         self.direcciones = {DETENER:Vector(), ARRIBA:Vector(0,-1), ABAJO:Vector(0,1), IZQUIERDA:Vector(-1,0), DERECHA:Vector(1,0)}
         self.direccion = DETENER
         self.velocidad = 100 * ANCHOCASILLA/16

@@ -18,6 +18,8 @@ class Entidad(object):
         self.objetivo = nodo
         self.visibilidad = True
         self.portalDesactivado = False
+        self.meta = None
+        self.metodoDireccion() = self.direccionAleatoria
 
     def setPosicion(self):
         self.posicion = self.nodo.posicion.copy()
@@ -70,7 +72,7 @@ class Entidad(object):
         if self.objetivoRebasado():
             self.nodo = self.objetivo
             direcciones = self.direccionValida()
-            direccion = self.direccionAleatoria(direcciones)
+            direccion = self.metodoDireccion(direccion)
             if not self.portalDesactivado:
                 if self.nodo.definirConexion[PORTAL] is not None:
                     self.nodo = self.nodo.definirConexion[PORTAL]
@@ -95,3 +97,11 @@ class Entidad(object):
     def direccionAleatoria(self, direcciones):
         return direcciones[randint(0, len(direcciones)-1)]
              
+    def direccionMeta(self, direcciones):
+        distancias = []
+        for direccion in direcciones:
+            vec = self.nodo.posicion + self.direcciones[direccion]*ANCHOCASILLA - self.meta
+            distancias.append(vec.magnitudCuadrados())
+        indice = distancias.index(min(distancias))
+        return direcciones[indice]
+    
