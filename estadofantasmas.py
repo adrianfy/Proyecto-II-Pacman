@@ -39,10 +39,18 @@ class ModoControlador(object):
                 self.tiempo = None
                 self.entidad.modoNormal()
                 self.actual = self.modoPrincipal.modo
-            else:
-              self.actual = self.modoPrincipal.modo 
-        
+            elif self.actual in [DISPERCION, PERSEGUIR]:
+                self.actual = self.modoPrincipal.modo
+            
+            if self.actual is SPAWN:
+                if self.entidad.nodo == self.entidad.spawnNodo:
+                    self.entidad.modoNormal()
+                    self.actual = self.modoPrincipal.modo
 
+    def setSpawnModo(self):
+        if self.actual is CARGA:
+            self.actual = SPAWN                
+        
 
     def setModoCarga(self):
         if self.actual in [DISPERCION,PERSEGUIR]:

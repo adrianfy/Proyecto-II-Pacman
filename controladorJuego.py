@@ -24,17 +24,25 @@ class ControladorJuego(object):
         self.pacman = Pacman(self.nodos.getIniciarNodoTemp())
         self.bolitas = GrupoBolitas("laberinto.txt")
         self.fantasma = Fantasma(self.nodos.getIniciarNodoTemp(), self.pacman)
+        self.fantasma.setSpawnNodo(self.nodos.getNododesdeCasillas(2+11.5, 3+14))
 
-        
     def actualizar(self):
         dt = self.reloj.tick(30) / 1000.0
         self.pacman.actualizar(dt)
         self.bolitas.actualizar(dt)
         self.fantasma.actualizar(dt)
         self.verEventoBolitas()
+        self.verEventoFantasmas()
         self.verEventos()
         self.renderizar()
     
+    def verEventoFantasmas(self):
+        if self.pacman.colisionFantasma(self.fantasma):
+            if self.fantasma.modo.actual is CARGA:
+                self.fantasma.iniciarSpawn()
+
+
+
     def verEventoBolitas(self):
         bolitas = self.pacman.bolitasComidas(self.bolitas.listaBolitas)
         if bolitas:

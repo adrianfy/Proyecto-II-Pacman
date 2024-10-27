@@ -89,12 +89,20 @@ class Pacman(Entidad):
     
     def bolitasComidas(self,listaBolitas):
         for bolitas in listaBolitas:
-            d = self.posicion - bolitas.posicion
-            dCuadrado = d.magnitudCuadrados()
-            rCuadrado = (bolitas.radio+self.radioColision)**2
-            if dCuadrado <= rCuadrado:
+            if self.verColision(bolitas):
                 return bolitas
         return None
+    
+    def colisionFantasma(self, fantasma):
+        return self.verColision(fantasma)
+    
+    def verColision(self, otro):
+        d = self.posicion - otro.posicion
+        dCuadrado = d.magnitudCuadrados()
+        rCuadrado = (self.radioColision + otro.radioColision)**2
+        if dCuadrado <= rCuadrado:
+            return True
+        return False
 
     def renderizar(self, pantalla):
         p = self.posicion.coordenadaInt()

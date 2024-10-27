@@ -40,4 +40,16 @@ class Fantasma (Entidad):
         self.setVelocidad(100)
         self.metodoDireccion = self.direccionMeta
 
+    def spawn(self):
+        self.meta = self.spawnNode.posicion
+
+    def setSpawnNodo(self, nodo):
+        self.spawnNodo = nodo
+
+    def iniciarSpawn(self):
+        self.modo.setSpawnMode()
+        if self.modo.actual == SPAWN:
+            self.setVelocidad(150)
+            self.metodoDireccion = self.direccionMeta
+            self.spawn()
 
