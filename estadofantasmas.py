@@ -3,6 +3,7 @@ from constantes import *
 class ModoPrincipal(object):
     def __init__(self):
         self.dispersion()
+        self.timer = 0
 
     def actualizar(self, dt):
         self.timer += dt

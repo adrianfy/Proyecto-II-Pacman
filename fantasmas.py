@@ -3,7 +3,7 @@ from pygame.locals import *
 from vector import Vector
 from constantes import *
 from entidad import Entidad
-from modos import ModoControlador
+from estadofantasmas import ModoControlador
 
 class Fantasma (Entidad):
     def __init__(self, nodo, pacman=None):
