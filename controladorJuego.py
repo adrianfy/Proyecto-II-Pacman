@@ -23,7 +23,7 @@ class ControladorJuego(object):
         self.nodos.setPortales((0,17),(27,17))
         self.pacman = Pacman(self.nodos.getIniciarNodoTemp())
         self.bolitas = GrupoBolitas("laberinto.txt")
-        self.fantasma = Fantasma(self.nodos.getIniciarNodoTemp())
+        self.fantasma = Fantasma(self.nodos.getIniciarNodoTemp(), self.pacman)
 
         
     def actualizar(self):
@@ -40,6 +40,8 @@ class ControladorJuego(object):
         if bolitas:
             self.bolitas.numComidas += 1
             self.bolitas.listaBolitas.remove(bolitas)
+            if bolitas.nombre == BOLITAGRANDE:
+                self.fantasma.iniciarCarga()
 
     def verEventos(self):
         for evento in pygame.event.get():
