@@ -18,7 +18,7 @@ class Bolitas(object):
             p = self.posicion.coordenadaInt()
             pygame.draw.circle(pantalla, self.color, p, self.radio)
 
-class BolitaGrande(Bolita):
+class BolitaGrande(Bolitas):
     def __init__(self, fila, columna):
         Bolitas.__init__(self, fila, columna)
         self.nombre = BOLITAGRANDE
@@ -63,6 +63,6 @@ class GrupoBolitas(object):
             return True
         return False
     
-    def rederizar(self, pantalla):
+    def renderizar(self, pantalla):
         for bolita in self.listaBolitas:
             bolita.renderizar(pantalla)

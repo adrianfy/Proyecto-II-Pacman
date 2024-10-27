@@ -3,6 +3,7 @@ from pygame.locals import *
 from constantes import *
 from pacman import Pacman
 from nodos import GrupoNodos
+from bolitas import GrupoBolitas
 from fantasmas import Fantasma
 
 class ControladorJuego(object):
@@ -21,11 +22,14 @@ class ControladorJuego(object):
         self.nodos = GrupoNodos("laberinto.txt")
         self.nodos.setPortales((0,17),(27,17))
         self.pacman = Pacman(self.nodos.getIniciarNodoTemp())
-        self.fantasma = Fantasma(self.nodo.getIniciarNodoTemp())
+        self.bolitas = GrupoBolitas("laberinto.txt")
+        self.fantasma = Fantasma(self.nodos.getIniciarNodoTemp())
+
         
     def actualizar(self):
         dt = self.reloj.tick(30) / 1000.0
         self.pacman.actualizar(dt)
+        self.bolitas.actualizar(dt)
         self.fantasma.actualizacion(dt)
         self.verEventos()
         self.renderizar()
@@ -38,6 +42,7 @@ class ControladorJuego(object):
     def renderizar(self):
         self.pantalla.blit(self.fondopantalla, (0,0))
         self.nodos.renderizar(self.pantalla)
+        self.bolitas.renderizar(self.pantalla)
         self.pacman.renderizar(self.pantalla)
         self.fantasma.renderizar(self.pantalla)
         pygame.display.update()

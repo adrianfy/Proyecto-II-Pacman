@@ -20,8 +20,8 @@ class GrupoNodos(object):
     def __init__(self, nivel):
         self.nivel = nivel
         self.nodosLUT = {}  # LUT significa "Look Up Table" (tabla de consulta)
-        self.simbolosNodo = ['+']
-        self.simbolosCamino = ['.']
+        self.simbolosNodo = ['+','P', 'n']
+        self.simbolosCamino = ['.','-', '|', 'p']
         data = self.leerLaberinto(nivel)
         self.crearTablaNodo(data)
         self.conectarHorizontal(data)

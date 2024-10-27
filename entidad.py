@@ -19,10 +19,10 @@ class Entidad(object):
         self.visibilidad = True
         self.portalDesactivado = False
         self.meta = None
-        self.metodoDireccion() = self.direccionAleatoria
+        self.metodoDireccion = self.direccionAleatoria
 
     def setPosicion(self):
-        self.posicion = self.nodo.posicion.copy()
+        self.posicion = self.nodo.posicion.copia()
 
     def direccionValida(self, direccion):
         if direccion is not DETENER:
@@ -67,7 +67,7 @@ class Entidad(object):
 
 
     def actualizacion(self, dt):
-        self.posicion += self.direcciones[self.direccion]*self.velocidad*dt
+        self.posicion += self.direcciones[self.direcion]*self.velocidad*dt
 
         if self.objetivoRebasado():
             self.nodo = self.objetivo
