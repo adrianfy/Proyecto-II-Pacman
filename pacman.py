@@ -22,6 +22,8 @@ class Pacman(object):
         self.posicion += self.direcciones[self.direccion]*self.velocidad*dt
         direccion = self.getTeclaValida()
         if self.objetivoRebasado():
+            if self.nodo.definirConexion[PORTAL] is not None:
+                self.nodo = self.nodo.definirConexion[PORTAL]
             self.nodo = self.objetivo
             self.objetivo = self.getNuevoObjetivo(direccion)
             if self.objetivo is not self.nodo:

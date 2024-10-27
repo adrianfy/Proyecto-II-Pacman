@@ -6,7 +6,7 @@ import numpy as np
 class Nodo(object):
     def __init__(self, x, y):
         self.posicion = Vector(x,y)
-        self.definirConexion = {ARRIBA:None, ABAJO:None,IZQUIERDA:None, DERECHA:None}
+        self.definirConexion = {ARRIBA:None, ABAJO:None,IZQUIERDA:None, DERECHA:None, PORTAL:None}
 
     def renderizar(self, pantalla):
         for n in self.definirConexion.keys():
@@ -84,6 +84,13 @@ class GrupoNodos(object):
     def getIniciarNodoTemp(self):
         nodos = list(self.nodosLUT.values())
         return nodos[0]
+    
+    def setPortales(self, portal1, portal2):
+        key1 = self.constructKey(*portal1)
+        key2 = self.constructKey(*portal2)
+        if key1 in self.nodosLUT.keys() and key2 in self.nodosLUT.keys():
+            self.nodosLUT[key1].definirConexion[PORTAL] = self.nodosLUT[key2]
+            self.nodosLUT[key2].definirConexion[PORTAL] = self.nodosLUT[key2]
     
     def renderizar(self, pantalla):
         for nodo in self.nodosLUT.values():

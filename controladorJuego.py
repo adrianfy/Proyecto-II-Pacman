@@ -18,8 +18,9 @@ class ControladorJuego(object):
     def iniciarJuego(self):
         self.setFondopantalla()
         self.nodos = GrupoNodos("laberinto.txt")
+        self.nodos.setPortales((0,17),(27,17))
         self.pacman = Pacman(self.nodos.getIniciarNodoTemp())
-        
+
     def actualizar(self):
         dt = self.reloj.tick(30) / 1000.0
         self.pacman.actualizar(dt)
