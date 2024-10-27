@@ -26,6 +26,7 @@ class GrupoNodos(object):
         self.crearTablaNodo(data)
         self.conectarHorizontal(data)
         self.conectarVertical(data)
+        self.casita = None
 
     def leerLaberinto(self, textfile):
         return np.loadtxt(textfile,dtype='<U1')
@@ -91,6 +92,23 @@ class GrupoNodos(object):
         if key1 in self.nodosLUT.keys() and key2 in self.nodosLUT.keys():
             self.nodosLUT[key1].definirConexion[PORTAL] = self.nodosLUT[key2]
             self.nodosLUT[key2].definirConexion[PORTAL] = self.nodosLUT[key2]
+
+    def crearCasitaFantasmas(self, xoffset, yoffset):
+        casitadata = np.array([['X','X','+','X','X'],
+                               ['X','X','.','X','X'],
+                               ['+','X','.','X','+'],
+                               ['+','.','+','.','+'],
+                               ['+','X','X','X','+']])
+        self.crearTablaNodo(casitadata, xoffset, yoffset)
+        self.conectarHorizontal(casitadata, xoffset, yoffset)
+        self.conectarVertical(casitadata,xoffset,yoffset)
+        self.casita = self.constructKey(xoffset+2, yoffset)
+        return self.casita
+    
+    def connectarNodosCasita(self, casita, otherkey, direccion):
+        key = self.constructKey(*otherkey)
+        self.nodosLUT[casita].definirConexion[direccion] = self.nodosLUT[key]
+        self.nodosLUT[key].definirConexion[direccion*-1] = self.nodosLUT[casita]
     
     def renderizar(self, pantalla):
         for nodo in self.nodosLUT.values():
