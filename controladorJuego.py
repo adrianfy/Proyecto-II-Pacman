@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 from constantes import *
 from pacman import Pacman
+from nodos import GrupoNodos
 
 class ControladorJuego(object):
     def __init__(self):
@@ -16,8 +17,9 @@ class ControladorJuego(object):
 
     def iniciarJuego(self):
         self.setFondopantalla()
-        self.pacman = Pacman()
-
+        self.nodos = GrupoNodos("laberinto.txt")
+        self.pacman = Pacman(self.nodos.getIniciarNodoTemp())
+        
     def actualizar(self):
         dt = self.reloj.tick(30) / 1000.0
         self.pacman.actualizar(dt)
@@ -31,6 +33,7 @@ class ControladorJuego(object):
 
     def renderizar(self):
         self.pantalla.blit(self.fondopantalla, (0,0))
+        self.nodos.renderizar(self.pantalla)
         self.pacman.renderizar(self.pantalla)
         pygame.display.update()
 
