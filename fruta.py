@@ -16,4 +16,4 @@ class Fruta(Entidad):
     def actualizar(self, dt):
         self.timer += dt
         if self.timer >= self.tiempodevida:
-            self.destroy = True
+            self.desaparecer = True

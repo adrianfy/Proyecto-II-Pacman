@@ -1,6 +1,6 @@
 import pygame
 import sys
-from controladorJuego import *
+#from controladorJuego import *
 # Iniciar programa
 
 
@@ -100,7 +100,7 @@ def menuPrincipal():
                          
                          #iniciarJuego(modoDeJuego)  # Llamada al juego con el modo seleccionado
                          pantalla.fill(NEGRO)
-                         juego.iniciarJuego()
+                         #juego.iniciarJuego()
                          pygame.display.flip()
 
                      elif opcionSeleccionada == 1:  # Cambiar modo de juego

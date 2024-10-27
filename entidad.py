@@ -13,13 +13,18 @@ class Entidad(object):
         self.radio = 10
         self.radioColision = 5
         self.color = BLANCO
-        self.nodo = nodo
-        self.setPosicion()
-        self.objetivo = nodo
         self.visibilidad = True
         self.portalDesactivado = False
         self.meta = None
         self.metodoDireccion = self.direccionMeta
+        self.setNodoInicial(nodo)
+
+    def setNodoInicial(self, nodo):
+        self.nodo = nodo
+        self.nodoInicial = nodo
+        self.objetivo = nodo
+        self.setPosicion()
+        
 
     def setPosicion(self):
         self.posicion = self.nodo.posicion.copia()
