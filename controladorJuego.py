@@ -30,10 +30,17 @@ class ControladorJuego(object):
         dt = self.reloj.tick(30) / 1000.0
         self.pacman.actualizar(dt)
         self.bolitas.actualizar(dt)
-        self.fantasma.actualizacion(dt)
+        self.fantasma.actualizar(dt)
+        self.verEventoBolitas()
         self.verEventos()
         self.renderizar()
     
+    def verEventoBolitas(self):
+        bolitas = self.pacman.bolitasComidas(self.bolitas.listaBolitas)
+        if bolitas:
+            self.bolitas.numComidas += 1
+            self.bolitas.listaBolitas.remove(bolitas)
+
     def verEventos(self):
         for evento in pygame.event.get():
             if evento.type == QUIT:

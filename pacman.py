@@ -16,6 +16,7 @@ class Pacman(Entidad):
         self.nodo = nodo
         self.setPosicion()
         self.objetivo = nodo
+        self.radioColision = 5
 
     def setPosicion(self):
         self.posicion = self.nodo.posicion.copia()
@@ -84,6 +85,15 @@ class Pacman(Entidad):
                 return True
         return False
     
+    def bolitasComidas(self,listaBolitas):
+        for bolitas in listaBolitas:
+            d = self.posicion - bolitas.posicion
+            dCuadrado = d.magnitudCuadrados()
+            rCuadrado = (bolitas.radio+self.radioColision)**2
+            if dCuadrado <= rCuadrado:
+                return bolitas
+        return None
+
     def renderizar(self, pantalla):
         p = self.posicion.coordenadaInt()
         pygame.draw.circle(pantalla, self.color, p, self.radio)

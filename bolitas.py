@@ -11,10 +11,10 @@ class Bolitas(object):
         self.radio = int(4*ANCHOCASILLA / 16)
         self.radioColision = int(4*ANCHOCASILLA / 16)
         self.puntos = 10
-        self.visbilidad = True
+        self.visibilidad = True
 
     def renderizar(self, pantalla):
-        if self.visbilidad:
+        if self.visibilidad:
             p = self.posicion.coordenadaInt()
             pygame.draw.circle(pantalla, self.color, p, self.radio)
 
