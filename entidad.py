@@ -77,11 +77,6 @@ class Entidad(object):
     def setVelocidad(self, velocidad):
         self.velocidad = velocidad * ANCHOCASILLA / 16
 
-    def renderizar(self, pantalla):
-        if self.visibilidad:
-            p = self.posicion.coordenadaInt()
-            pygame.draw.circle(pantalla, self.color, p, self.radio)
-
     def direccionesValidas(self):
         direcciones = []
         for key in [ARRIBA, ABAJO, IZQUIERDA, DERECHA]:
@@ -102,3 +97,13 @@ class Entidad(object):
             distancias.append(vec.magnitudCuadrados())
         indice = distancias.index(min(distancias))
         return direcciones[indice]
+    
+    def setEntreNodos(self, direccion):
+        if self.nodo.definirConexion[direccion] is not None:
+            self.objetivo = self.nodo.definirConexion[direccion]
+            self.posicion = (self.nodo.posicion + self.objetivo.posicion) / 2.0
+
+    def renderizar(self, pantalla):
+        if self.visibilidad:
+            p = self.posicion.coordenadaInt()
+            pygame.draw.circle(pantalla, self.color, p, self.radio)

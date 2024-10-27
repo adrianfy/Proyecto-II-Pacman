@@ -6,17 +6,19 @@ from entidad import Entidad
 
 class Pacman(Entidad):
     def __init__(self, nodo):
+        Entidad.__init__(self,nodo)
         self.nombre = PACMAN
-        self.color = AMARILLO
         self.direcciones = {DETENER:Vector(), ARRIBA:Vector(0,-1), ABAJO:Vector(0,1), IZQUIERDA:Vector(-1,0), DERECHA:Vector(1,0)}
         self.direccion = DETENER
         self.velocidad = 100 * ANCHOCASILLA/16
         self.radio = 10
         self.color = AMARILLO
+        self.direccion = IZQUIERDA
         self.nodo = nodo
-        self.setPosicion()
+        #self.setPosicion()
         self.objetivo = nodo
         self.radioColision = 5
+        self.setEntreNodos(IZQUIERDA)
 
     def setPosicion(self):
         self.posicion = self.nodo.posicion.copia()
