@@ -62,14 +62,14 @@ class Blinky(Fantasma):
         Fantasma.__init__(self, nodo, pacman, blinky)
         self.nombre = BLINKY
         self.color = ROJO
-        self.imagen = ImagendeFantasmas(self)
+        self.imagenes = ImagendeFantasmas(self)
 
 class Pinky(Fantasma):
     def __init__(self, nodo, pacman=None, blinky=None):
         Fantasma.__init__(self, nodo, pacman, blinky)
         self.nombre = PINKY
         self.color = ROSADO
-        self.imagen = ImagendeFantasmas(self)
+        self.imagenes = ImagendeFantasmas(self)
 
     def disperccion(self):
         self.meta = Vector(ANCHOCASILLA*COLUMNA, 0)
@@ -82,7 +82,7 @@ class Inky(Fantasma):
         Fantasma.__init__(self, nodo, pacman, blinky)
         self.nombre = INKY
         self.color = CYAN
-        self.imagen = ImagendeFantasmas(self)
+        self.imagenes = ImagendeFantasmas(self)
     
     def disperccion(self):
         self.meta = Vector(ANCHOCASILLA * COLUMNA, ALTOCASILLA * FILA)
@@ -97,7 +97,7 @@ class Clyde(Fantasma):
         Fantasma.__init__(self, nodo, pacman, blinky)
         self.nombre = CLYDE
         self.color = NARANJA
-        self.imagen = ImagendeFantasmas(self)
+        self.imagenes = ImagendeFantasmas(self)
 
     def disperccion(self):
         self.goal = Vector(0, ANCHOCASILLA * FILA)
@@ -158,4 +158,3 @@ class GrupoFantasma(object):
     def renderizar(self, pantalla):
         for fantasma in self:
             fantasma.renderizar(pantalla)
-

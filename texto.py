@@ -48,7 +48,7 @@ class GrupoTexto(object):
         self.iniciarTexto()
         self.mostrarTexto(INICIOTXT)
 
-    def insertarText(self, texto, color, x, y, tamanno, tiempo=None, id=None):
+    def insertarTexto(self, texto, color, x, y, tamanno, tiempo=None, id=None):
         self.siguienteid += 1
         self.todotexto[self.siguienteid] = Texto(texto, color, x, y, tamanno, tiempo=tiempo, id=id)
         return self.siguienteid
@@ -57,14 +57,14 @@ class GrupoTexto(object):
         self.todotexto.pop(id)
         
     def iniciarTexto(self):
-        size = ALTOCASILLA
-        self.todotexto[PUNTAJETXT] = Texto("0".zfill(8), BLANCO, 0, ALTOCASILLA, size)
-        self.todotexto[NIVELTXT] = Texto(str(1).zfill(3), BLANCO, 23*ANCHOCASILLA, ALTOCASILLA, size)
-        self.todotexto[INICIOTXT] = Texto("READY!", AMARILLO, 11.25*ANCHOCASILLA, 20*ALTOCASILLA, size, visible=False)
-        self.todotexto[PAUSATXT] = Texto("PAUSA!", AMARILLO, 10.625*ANCHOCASILLA, 20*ALTOCASILLA, size, visible=False)
-        self.todotexto[GAMEOVERTXT] = Texto("GAMEOVER!", AMARILLO, 10*ANCHOCASILLA, 20*ALTOCASILLA, size, visible=False)
-        self.todotexto("PUNTAJE", BLANCO, 0, 0, size)
-        self.todotexto("NIVEL", BLANCO, 23*ANCHOCASILLA, 0, size)
+        tamanno = ALTOCASILLA
+        self.todotexto[PUNTAJETXT] = Texto("0".zfill(8), BLANCO, 0, ALTOCASILLA, tamanno)
+        self.todotexto[NIVELTXT] = Texto(str(1).zfill(3), BLANCO, 23*ANCHOCASILLA, ALTOCASILLA, tamanno)
+        self.todotexto[INICIOTXT] = Texto("READY!", AMARILLO, 11.25*ANCHOCASILLA, 20*ALTOCASILLA, tamanno, visbilidad=False)
+        self.todotexto[PAUSATXT] = Texto("PAUSA!", AMARILLO, 10.625*ANCHOCASILLA, 20*ALTOCASILLA, tamanno, visbilidad=False)
+        self.todotexto[GAMEOVERTXT] = Texto("GAMEOVER!", AMARILLO, 10*ANCHOCASILLA, 20*ALTOCASILLA, tamanno, visbilidad=False)
+        self.insertarTexto("PUNTAJE", BLANCO, 0, 0, tamanno)
+        self.insertarTexto("NIVEL", BLANCO, 23*ANCHOCASILLA, 0, tamanno)
 
     def actualizar(self, dt):
         for tkey in list(self.todotexto.keys()):

@@ -56,3 +56,20 @@ class imagendeFrutas(HojadeImagenes):
     
     def getImagen(self, x, y):
         return HojadeImagenes.getImagen(self, x, y, 2*ANCHOCASILLA, 2*ALTOCASILLA)
+    
+class vidasPacman(HojadeImagenes):
+    def __init__(self, numVidas):
+        HojadeImagenes.__init__(self)
+        self.reiniciarVidas(numVidas)
+
+    def removerImagen(self):
+        if len(self.imagen) > 0:
+            self.imagen.pop(0)
+
+    def reiniciarVidas(self, numVidas):
+        self.imagenes = []
+        for i in range(numVidas):
+            self.imagenes.append(self.getImagen(0,0))
+
+    def getImagen(self, x, y):
+        return HojadeImagenes.getImagen(self,x ,y, 2*ANCHOCASILLA, 2*ALTOCASILLA)

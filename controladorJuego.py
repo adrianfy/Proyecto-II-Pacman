@@ -7,6 +7,8 @@ from bolitas import GrupoBolitas
 from fantasmas import GrupoFantasma
 from fruta import Fruta
 from pausa import Pausa
+from texto import GrupoTexto
+from imagenes import vidasPacman
 
 class ControladorJuego(object):
     def __init__(self):
@@ -18,6 +20,9 @@ class ControladorJuego(object):
         self.pausa = Pausa(True)
         self.nivel = 0
         self.vidas = 5
+        self.puntaje = 0
+        self.grupotexto = GrupoTexto()
+        self.imagenVidas = vidasPacman(self.vidas)
 
     def reanudarJuego(self):
         self.vidas = 5
@@ -25,18 +30,25 @@ class ControladorJuego(object):
         self.pausa.pausa = True
         self.fruta = None
         self.iniciarJuego()
+        self.grupotexto.mostrarTexto(INICIOTXT)
 
     def reiniciarNivel(self):
         self.pausa.pausa = True
         self.pacman.reiniciar()
         self.fantasmas.reiniciar()
         self.fruta = None
+        self.imagenVidas.reiniciarVidas(self.vidas)
+        self.puntaje = 0
+        self.grupotexto.actualizarPuntaje(self.puntaje)
+        self.grupotexto.actualizarNivel(self.nivel)
+        self.grupotexto.actualizarTexto(INICIOTXT)
     
     def siguienteNivel(self):
         self.mostrarEntidades()
         self.nivel += 1
         self.pausa.pausa = True
         self.iniciarJuego()
+        self.grupotexto.actualizarNivel(self.nivel)
 
     def setFondopantalla(self):
         self.fondopantalla = pygame.surface.Surface(TAMANNOPANTALLA).convert()
@@ -73,6 +85,7 @@ class ControladorJuego(object):
 
     def actualizar(self):
         dt = self.reloj.tick(30) / 1000.0
+        self.grupotexto.actualizar(dt)
         self.pacman.actualizar(dt)
         self.bolitas.actualizar(dt)
         if not self.pausa.pausa:
@@ -88,18 +101,28 @@ class ControladorJuego(object):
         self.verEventos()
         self.renderizar()
     
+    def actualizarPuntaje(self, puntos):
+        self.puntaje += puntos
+        self.grupotexto.actualizarPuntaje(self.puntaje)
+
     def verEventoFantasmas(self):
         for fantasma in self.fantasmas:
             if self.pacman.colisionFantasma(fantasma):
                 if fantasma.modo.actual is CARGA:
+                    #fantasma.visibilidad = False
+                    self.actualizarPuntaje(fantasma.puntos)
+                    self.grupotexto.insertarTexto(str(fantasma.puntos), BLANCO, fantasma.posicion.y, 8, tiempo=1)
+                    self.fantasmas.actualizarPuntos()
                     fantasma.iniciarSpawn()
                     self.nodos.permitirAccesoCasita(fantasma)
                 elif fantasma.modo.actual is not SPAWN:
                     if self.pacman.vivo:
                         self.vidas -= 1
+                        self.imagenVidas.removerImagen()
                         self.pacman.muerto()
                         self.fantasmas.esconderse()
                         if self.vidas <= 0:
+                            self.grupotexto.mostrarTexto(GAMEOVERTXT)
                             self.pausa.setPausa(tiempoPausa=3, func=self.reanudarJuego)
                         else:
                             self.pausa.setPausa(tiempoPausa=3, func=self.reiniciarNivel)
@@ -110,6 +133,8 @@ class ControladorJuego(object):
                 self.fruta = Fruta(self.nodos.getNododesdeCasillas(9,20))
         if self.fruta is not None:
             if self.pacman.verColision(self.fruta):
+                self.actualizarPuntaje(self.fruta.puntaje)
+                self.grupotexto.insertarTexto(str(self.fruta.puntaje), BLANCO, self.fruta.posicion.x, self.posicion.y, 8, tiempo=1)
                 self.fruta = None
             elif self.fruta.desaparecer:
                 self.fruta = None
@@ -118,6 +143,7 @@ class ControladorJuego(object):
         bolitas = self.pacman.bolitasComidas(self.bolitas.listaBolitas)
         if bolitas:
             self.bolitas.numComidas += 1
+            self.actualizarPuntaje(bolitas.puntos)
             if self.bolitas.numComidas == 30:
                 self.fantasmas.inky.nodoInicial.accesoPermitido(DERECHA, self.fantasmas.inky)
             if self.bolitas.numComidas == 70:
@@ -146,8 +172,10 @@ class ControladorJuego(object):
                     if self.pacman.vivo:
                         self.pausa.setPausa(jugadorPauso=True)
                         if not self.pausa.pausa:
+                         self.grupotexto.textoOculto()
                          self.mostrarEntidades()
                         else:
+                            self.grupotexto.mostrarTexto(PAUSATXT)
                             self.esconderEntidades()
 
     def renderizar(self):
@@ -158,6 +186,13 @@ class ControladorJuego(object):
             self.fruta.renderizar(self.pantalla)
         self.pacman.renderizar(self.pantalla)
         self.fantasmas.renderizar(self.pantalla)
+        self.grupotexto.renderizar(self.pantalla)
+
+        for i in range(len(self.imagenVidas.imagenes)):
+            x = self.imagenVidas.imagenes[i].get_width() * i
+            y = ANCHOPANTALLA - self.imagenVidas.imagenes[i].get_height()
+            self.pantalla.blit(self.imagenVidas.imagenes[i], (x, y))
+
         pygame.display.update()
 
 if __name__ == "__main__":
