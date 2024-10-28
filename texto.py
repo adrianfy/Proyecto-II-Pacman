@@ -9,7 +9,7 @@ class Texto(object):
         self.color = color
         self.tamanno = tamanno
         self.visbilidad = visbilidad
-        self.position = Vector(x, y)
+        self.posicion = Vector(x, y)
         self.timer = 0
         self.tiempodevida = tiempo
         self.tag = None
@@ -37,7 +37,7 @@ class Texto(object):
 
     def renderizar(self, pantalla):
         if self.visbilidad:
-            x, y = self.position.coordenadaTupla()
+            x, y = self.posicion.coordenadaTupla()
             pantalla.blit(self.tag, (x, y))
 
 

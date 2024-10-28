@@ -3,6 +3,7 @@ from pygame.locals import *
 from vector import Vector
 from constantes import *
 from entidad import Entidad
+from imagenes import ImagendePacman
 
 class Pacman(Entidad):
     def __init__(self, nodo):
@@ -20,6 +21,7 @@ class Pacman(Entidad):
         self.radioColision = 5
         self.setEntreNodos(IZQUIERDA)
         self.vivo = True
+        self.imagen = ImagendePacman(self)
 
     def reiniciar(self):
         Entidad.reiniciar(self)

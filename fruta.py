@@ -1,6 +1,7 @@
 import pygame
 from entidad import Entidad
 from constantes import *
+from imagenes import imagendeFrutas
 
 class Fruta(Entidad):
     def __init__(self, nodo):
@@ -12,6 +13,7 @@ class Fruta(Entidad):
         self.desaparecer = False
         self.puntaje = 100
         self.setEntreNodos(DERECHA)
+        self.imagen = imagendeFrutas(self)
 
     def actualizar(self, dt):
         self.timer += dt

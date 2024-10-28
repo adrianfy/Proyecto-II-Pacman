@@ -18,16 +18,13 @@ class Entidad(object):
         self.meta = None
         self.metodoDireccion = self.direccionMeta
         self.setNodoInicial(nodo)
+        self.imagen = None
 
     def setNodoInicial(self, nodo):
         self.nodo = nodo
         self.nodoInicial = nodo
         self.objetivo = nodo
         self.setPosicion()
-        
-
-    def setPosicion(self):
-        self.posicion = self.nodo.posicion.copia()
 
     def actualizar(self, dt):
         self.posicion += self.direcciones[self.direccion]*self.velocidad*dt
@@ -109,10 +106,8 @@ class Entidad(object):
             self.objetivo = self.nodo.definirConexion[direccion]
             self.posicion = (self.nodo.posicion + self.objetivo.posicion) / 2.0
 
-    def renderizar(self, pantalla):
-        if self.visibilidad:
-            p = self.posicion.coordenadaInt()
-            pygame.draw.circle(pantalla, self.color, p, self.radio)
+    def setPosicion(self):
+        self.posicion = self.nodo.posicion.copia()
 
     def reiniciar(self):
         self.setNodoInicial(self.nodoInicial)
@@ -120,5 +115,10 @@ class Entidad(object):
         self.velocidad = 100
         self.visibilidad = True
 
-    
-
+    def renderizar(self, pantalla):
+        if self.visibilidad:
+            if self.imagen is not None:
+                pantalla.blit(self.imagen, self.posicion.coordenadaTupla())
+            else:
+                p = self.posicion.coordenadaInt()
+                pygame.draw.circle(pantalla, self.color, p, self.radio)

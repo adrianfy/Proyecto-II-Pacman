@@ -4,6 +4,7 @@ from vector import Vector
 from constantes import *
 from entidad import Entidad
 from estadofantasmas import ModoControlador
+from imagenes import ImagendeFantasmas
 
 class Fantasma (Entidad):
     def __init__(self, nodo, pacman=None, blinky=None):
@@ -44,7 +45,7 @@ class Fantasma (Entidad):
         self.nodoCasita.accesoDenegado(ABAJO, self)
 
     def spawn(self):
-        self.meta = self.spawnNode.posicion
+        self.meta = self.spawnNodo.posicion
 
     def setSpawnNodo(self, nodo):
         self.spawnNodo = nodo
@@ -61,12 +62,14 @@ class Blinky(Fantasma):
         Fantasma.__init__(self, nodo, pacman, blinky)
         self.nombre = BLINKY
         self.color = ROJO
+        self.imagen = ImagendeFantasmas(self)
 
 class Pinky(Fantasma):
     def __init__(self, nodo, pacman=None, blinky=None):
         Fantasma.__init__(self, nodo, pacman, blinky)
         self.nombre = PINKY
         self.color = ROSADO
+        self.imagen = ImagendeFantasmas(self)
 
     def disperccion(self):
         self.meta = Vector(ANCHOCASILLA*COLUMNA, 0)
@@ -79,6 +82,7 @@ class Inky(Fantasma):
         Fantasma.__init__(self, nodo, pacman, blinky)
         self.nombre = INKY
         self.color = CYAN
+        self.imagen = ImagendeFantasmas(self)
     
     def disperccion(self):
         self.meta = Vector(ANCHOCASILLA * COLUMNA, ALTOCASILLA * FILA)
@@ -93,13 +97,14 @@ class Clyde(Fantasma):
         Fantasma.__init__(self, nodo, pacman, blinky)
         self.nombre = CLYDE
         self.color = NARANJA
+        self.imagen = ImagendeFantasmas(self)
 
     def disperccion(self):
         self.goal = Vector(0, ANCHOCASILLA * FILA)
 
     def perseguir(self):
         d = self.pacman.posicion - self.posicion
-        ds = ds.magnitudCuadrados()
+        ds = d.magnitudCuadrados()
         if ds <= (ANCHOCASILLA * 8) **2:
             self.disperccion()
         else:

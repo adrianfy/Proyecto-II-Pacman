@@ -112,6 +112,7 @@ class GrupoNodos(object):
                                ['+','X','.','X','+'],
                                ['+','.','+','.','+'],
                                ['+','X','X','X','+']])
+        
         self.crearTablaNodo(casitadata, xoffset, yoffset)
         self.conectarHorizontal(casitadata, xoffset, yoffset)
         self.conectarVertical(casitadata,xoffset,yoffset)
@@ -138,12 +139,12 @@ class GrupoNodos(object):
               nodo.accesoPermitido(direccion,entidad)
 
     def denegarAcessoLista(self, col, fila, direccion, entidades):
-        for entity in entidades:
-            self.accesoDenegado(col, fila, direccion, entidades)
+        for entidad in entidades:
+            self.accesoDenegado(col, fila, direccion, entidad)
 
     def permitirAcessoLista(self, col, fila, direccion, entidades):
-        for entity in entidades:
-            self.accesoPermitido(col, fila, direccion, entidades)
+        for entidad in entidades:
+            self.accesoPermitido(col, fila, direccion, entidad)
 
     def denegarAccesoCasita(self, entidad):
         self.nodosLUT[self.casita].accesoDenegado(ABAJO, entidad)
@@ -152,11 +153,11 @@ class GrupoNodos(object):
         self.nodosLUT[self.casita].accesoPermitido(ABAJO, entidad)
 
     def denegarAccesoListaCasita(self, entidades):
-        for entity in entidades:
+        for entidad in entidades:
             self.denegarAccesoCasita(entidad)
 
     def denegarAccesoListaCasita(self, entidades):
-        for entity in entidades:
+        for entidad in entidades:
             self.permitirAccesoCasita(entidad)
         
 
