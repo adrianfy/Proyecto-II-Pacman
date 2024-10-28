@@ -7,6 +7,10 @@ class Nodo(object):
     def __init__(self, x, y):
         self.posicion = Vector(x,y)
         self.definirConexion = {ARRIBA:None, ABAJO:None,IZQUIERDA:None, DERECHA:None, PORTAL:None}
+        self.acceso ={ARRIBA:[PACMAN, BLINKY, PINKY, INKY, CLYDE, FRUTA],
+                      ABAJO:[PACMAN, BLINKY, PINKY, INKY, CLYDE, FRUTA],
+                      IZQUIERDA:[PACMAN, BLINKY, PINKY, INKY, CLYDE, FRUTA],
+                      DERECHA:[PACMAN, BLINKY, PINKY, INKY, CLYDE, FRUTA]}
 
     def renderizar(self, pantalla):
         for n in self.definirConexion.keys():
@@ -15,6 +19,15 @@ class Nodo(object):
                 linea_final = self.definirConexion[n].posicion.coordenadaTupla()
                 pygame.draw.line(pantalla, BLANCO, linea_inicio, linea_final, 4)
                 pygame.draw.circle(pantalla, ROJO, self.posicion.coordenadaInt(), 12)
+
+    def accesoDenegado(self,direccion, entidad):
+        if entidad.nombre in self.acceso[direccion]:
+            self.acceso[direccion].remove(entidad.nombre)
+
+    def accesoPermitido(self, direccion, entidad):
+        if entidad.nombre not in self.acceso[direccion]:
+            self.acceso[direccion].append(entidad.nombre)
+
 
 class GrupoNodos(object):
     def __init__(self, nivel):
@@ -76,8 +89,8 @@ class GrupoNodos(object):
             return self.nodosLUT[(xpixel, ypixel)]
         return None
 
-    def getNododesdeCasillas(self, col, row):
-        x, y = self.constructKey(col, row)
+    def getNododesdeCasillas(self, col, fila):
+        x, y = self.constructKey(col, fila)
         if (x, y) in self.nodosLUT.keys():
             return self.nodosLUT[(x, y)]
         return None
@@ -113,3 +126,40 @@ class GrupoNodos(object):
     def renderizar(self, pantalla):
         for nodo in self.nodosLUT.values():
             nodo.renderizar(pantalla)
+
+    def accesoDenegado(self, col, fila, direccion, entidad):
+        nodo = self.getNododesdeCasillas(col,fila)
+        if nodo is not None:
+            nodo.accesoDenegado(direccion,entidad)
+
+    def accesoPermitido(self, col, fila, direccion,entidad):
+          nodo = self.getNododesdeCasillas(col,fila)
+          if nodo is not None:
+              nodo.accesoPermitido(direccion,entidad)
+
+    def denegarAcessoLista(self, col, fila, direccion, entidades):
+        for entity in entidades:
+            self.accesoDenegado(col, fila, direccion, entidades)
+
+    def permitirAcessoLista(self, col, fila, direccion, entidades):
+        for entity in entidades:
+            self.accesoPermitido(col, fila, direccion, entidades)
+
+    def denegarAccesoCasita(self, entidad):
+        self.nodosLUT[self.casita].accesoDenegado(ABAJO, entidad)
+
+    def permitirAccesoCasita(self, entidad):
+        self.nodosLUT[self.casita].accesoPermitido(ABAJO, entidad)
+
+    def denegarAccesoListaCasita(self, entidades):
+        for entity in entidades:
+            self.denegarAccesoCasita(entidad)
+
+    def denegarAccesoListaCasita(self, entidades):
+        for entity in entidades:
+            self.permitirAccesoCasita(entidad)
+        
+
+
+    
+

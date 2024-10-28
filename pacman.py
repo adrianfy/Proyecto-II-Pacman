@@ -19,6 +19,17 @@ class Pacman(Entidad):
         self.objetivo = nodo
         self.radioColision = 5
         self.setEntreNodos(IZQUIERDA)
+        self.vivo = True
+
+    def reiniciar(self):
+        Entidad.reiniciar(self)
+        self.direccion = IZQUIERDA
+        self.setEntreNodos(IZQUIERDA)
+        self.vivo = True
+
+    def muerto(self):
+        self.vivo = False
+        self.direccion = DETENER
 
     def setPosicion(self):
         self.posicion = self.nodo.posicion.copia()

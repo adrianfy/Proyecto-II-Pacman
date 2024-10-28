@@ -17,6 +17,20 @@ class ControladorJuego(object):
         self.fruta = None
         self.pausa = Pausa(True)
         self.nivel = 0
+        self.vidas = 5
+
+    def reanudarJuego(self):
+        self.vidas = 5
+        self.nivel = 0
+        self.pausa.pausa = True
+        self.fruta = None
+        self.iniciarJuego()
+
+    def reiniciarNivel(self):
+        self.pausa.pausa = True
+        self.pacman.reiniciar()
+        self.fantasmas.reiniciar()
+        self.fruta = None
     
     def siguienteNivel(self):
         self.mostrarEntidades()
@@ -40,6 +54,17 @@ class ControladorJuego(object):
         self.fantasmas.inky.setNodoInicial(self.nodos.getNododesdeCasillas(0+11.5, 3+14))
         self.fantasmas.clyde.setNodoInicial(self.nodos.getNododesdeCasillas(4+11.5, 3+14))
         self.fantasmas.setSpawnNodo(self.nodos.getNododesdeCasillas(2+11.5, 3+14))
+        self.nodos.denegarAccesoCasita(self.pacman)
+        self.nodos.denegarAccesoListaCasita(self.fantasmas)
+        self.nodos.denegarAcessoLista(2+11.5, 3+14, IZQUIERDA,self.fantasmas)
+        self.nodos.denegarAcessoLista(2+11.5, 3+14, DERECHA,self.fantasmas)
+        self.fantasmas.inky.iniciarNodo.accesoDenegado(DERECHA,self.fantasmas.inky)
+        self.fantasmas.clyde.iniciarNodo.accesoDenegado(IZQUIERDA,self.fantasmas.clyde)
+        self.nodos.denegarAcessoLista(12, 14, ARRIBA, self.fantasmas)
+        self.nodos.denegarAcessoLista(15, 14, ARRIBA, self.fantasmas)
+        self.nodos.denegarAcessoLista(12, 26, ARRIBA, self.fantasmas)
+        self.nodos.denegarAcessoLista(15, 26, ARRIBA, self.fantasmas)
+        
 
     def actualizar(self):
         dt = self.reloj.tick(30) / 1000.0
@@ -63,6 +88,16 @@ class ControladorJuego(object):
             if self.pacman.colisionFantasma(fantasma):
                 if fantasma.modo.actual is CARGA:
                     fantasma.iniciarSpawn()
+                    self.nodos.permitirAccesoCasita(fantasma)
+                elif fantasma.modo.actual is not SPAWN:
+                    if self.pacman.vivo:
+                        self.vidas -= 1
+                        self.pacman.muerto()
+                        self.fantasmas.esconderse()
+                        if self.vidas <= 0:
+                            self.pausa.setPausa(tiempoPausa=3, func=self.reanudarJuego)
+                        else:
+                            self.pausa.setPausa(tiempoPausa=3, func=self.reiniciarNivel)
 
     def verEventoFruta(self):
         if self.bolitas.numComidas == 50 or self.bolitas.numComidas == 100:
@@ -78,6 +113,10 @@ class ControladorJuego(object):
         bolitas = self.pacman.bolitasComidas(self.bolitas.listaBolitas)
         if bolitas:
             self.bolitas.numComidas += 1
+            if self.bolitas.numComidas == 30:
+                self.fantasmas.inky.nodoInicial.accesoPermitido(DERECHA, self.fantasmas.inky)
+            if self.bolitas.numComidas == 70:
+                self.fantasmas.clyde.nodoInicial.accesoPermitido(IZQUIERDA, self.fantasmas.clyde)
             self.bolitas.listaBolitas.remove(bolitas)
             if bolitas.nombre == BOLITAGRANDE:
                 self.fantasmas.iniciarSusto()
@@ -99,11 +138,12 @@ class ControladorJuego(object):
                 exit()
             elif evento.type == KEYDOWN:
                 if evento.key == K_SPACE:
-                    self.pausa.setPausa(jugadorPauso=True)
-                    if not self.pausa.pausa:
-                        self.mostrarEntidades()
-                    else:
-                        self.esconderEntidades()
+                    if self.pacman.vivo:
+                        self.pausa.setPausa(jugadorPauso=True)
+                        if not self.pausa.pausa:
+                         self.mostrarEntidades()
+                        else:
+                            self.esconderEntidades()
 
     def renderizar(self):
         self.pantalla.blit(self.fondopantalla, (0,0))

@@ -49,8 +49,9 @@ class Entidad(object):
                
     def direccionValida(self, direccion):
         if direccion is not DETENER:
-            if self.nodo.definirConexion[direccion] is not None:
-                return True
+            if self.nombre in self.nodo.acceso[direccion]:
+              if self.nodo.definirConexion[direccion] is not None:
+                 return True
         return False
 
     def objetivoNuevo(self, direccion):
@@ -112,3 +113,12 @@ class Entidad(object):
         if self.visibilidad:
             p = self.posicion.coordenadaInt()
             pygame.draw.circle(pantalla, self.color, p, self.radio)
+
+    def reiniciar(self):
+        self.setNodoInicial(self.nodoInicial)
+        self.direccion = DETENER
+        self.velocidad = 100
+        self.visibilidad = True
+
+    
+

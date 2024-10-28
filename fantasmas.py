@@ -41,6 +41,7 @@ class Fantasma (Entidad):
     def modoNormal(self):
         self.setVelocidad(100)
         self.metodoDireccion = self.direccionMeta
+        self.nodoCasita.accesoDenegado(ABAJO, self)
 
     def spawn(self):
         self.meta = self.spawnNode.posicion
@@ -137,8 +138,9 @@ class GrupoFantasma(object):
             fantasma.puntos = 200
 
     def reiniciar(self):
-        for fantasma in self:
-            fantasma.reiniciar()
+        Entidad.reiniciar(self)
+        self.puntos = 200
+        self.metodoDireccion = self.direccionMeta
 
     def esconderse(self):
         for fantasma in self:
