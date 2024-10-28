@@ -3,7 +3,7 @@ from pygame.locals import *
 from vector import Vector
 from constantes import *
 from entidad import Entidad
-from imagenes import ImagendePacman
+from sprites import ImagendePacman
 
 class Pacman(Entidad):
     def __init__(self, nodo):

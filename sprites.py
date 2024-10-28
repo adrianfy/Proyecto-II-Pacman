@@ -5,24 +5,24 @@ import numpy as np
 ANCHOCASILLABASE = 16
 ALTOCASILLABASE = 16
 
-class HojadeImagenes(object):
+class HojadeSprites(object):
     def __init__(self):
-        self.imagen = pygame.image.load("Recursos/Imagenes/pacman.png").convert()
-        transcolor = self.imagen.get_at((0,0))
-        self.imagen.set_colorkey(transcolor)
-        ancho = int(self.imagen.get_width() / ANCHOCASILLABASE * ANCHOCASILLA)
-        alto = int(self.imagen.get_height() / ALTOCASILLABASE * ALTOCASILLA)
-        self.imagen = pygame.transform.scale(self.imagen, (ancho, alto))
+        self.hojaSprite = pygame.image.load("Recursos/Imagenes/pacman.png").convert()
+        transcolor = self.hojaSprite.get_at((0,0))
+        self.hojaSprite.set_colorkey(transcolor)
+        ancho = int(self.hojaSprite.get_width() / ANCHOCASILLABASE * ANCHOCASILLA)
+        alto = int(self.hojaSprite.get_height() / ALTOCASILLABASE * ALTOCASILLA)
+        self.hojaSprite = pygame.transform.scale(self.hojaSprite, (ancho, alto))
 
     def getImagen(self, x, y, ancho, alto):
         x *= ANCHOCASILLA
         y *= ALTOCASILLA
-        self.imagen.set_clip(pygame.Rect(x,y,ancho, alto))
-        return self.imagen.subsurface(self.imagen.get_clip())
+        self.hojaSprite.set_clip(pygame.Rect(x,y,ancho, alto))
+        return self.hojaSprite.subsurface(self.hojaSprite.get_clip())
     
-class ImagendePacman(HojadeImagenes):
+class ImagendePacman(HojadeSprites):
     def __init__(self, entidad):
-        HojadeImagenes.__init__(self)
+        HojadeSprites.__init__(self)
         self.entidad = entidad
         self.entidad.imagen = self.getIniciodeImagen()
 
@@ -30,11 +30,11 @@ class ImagendePacman(HojadeImagenes):
         return self.getImagen(8,0)
     
     def getImagen(self, x, y):
-        return HojadeImagenes.getImagen(self, x, y, 2 * ANCHOCASILLA, 2 * ALTOCASILLA)
+        return HojadeSprites.getImagen(self, x, y, 2 * ANCHOCASILLA, 2 * ALTOCASILLA)
     
-class ImagendeFantasmas(HojadeImagenes):
+class ImagendeFantasmas(HojadeSprites):
     def __init__(self, entidad):
-        HojadeImagenes.__init__(self)
+        HojadeSprites.__init__(self)
         self.x = {BLINKY: 0, PINKY: 2, INKY: 4, CLYDE: 6}
         self.entidad = entidad
         self.entidad.imagen = self.getIniciodeImagen()
@@ -43,11 +43,11 @@ class ImagendeFantasmas(HojadeImagenes):
         return self.getImagen(self.x[self.entidad.nombre], 4)
     
     def getImagen(self, x, y):
-        return HojadeImagenes.getImagen(self, x, y, 2* ANCHOCASILLA, 2* ALTOCASILLA)
+        return HojadeSprites.getImagen(self, x, y, 2* ANCHOCASILLA, 2* ALTOCASILLA)
     
-class imagendeFrutas(HojadeImagenes):
+class imagendeFrutas(HojadeSprites):
     def __init__(self, entidad):
-        HojadeImagenes.__init__(self)
+        HojadeSprites.__init__(self)
         self.entidad = entidad
         self.entidad.imagen = self.getIniciodeImagen()
 
@@ -55,16 +55,16 @@ class imagendeFrutas(HojadeImagenes):
         return self.getImagen(16,8)
     
     def getImagen(self, x, y):
-        return HojadeImagenes.getImagen(self, x, y, 2*ANCHOCASILLA, 2*ALTOCASILLA)
+        return HojadeSprites.getImagen(self, x, y, 2*ANCHOCASILLA, 2*ALTOCASILLA)
     
-class vidasPacman(HojadeImagenes):
+class vidasPacman(HojadeSprites):
     def __init__(self, numVidas):
-        HojadeImagenes.__init__(self)
+        HojadeSprites.__init__(self)
         self.reiniciarVidas(numVidas)
 
     def removerImagen(self):
-        if len(self.imagen) > 0:
-            self.imagen.pop(0)
+        if len(self.imagenes) > 0:
+            self.imagenes.pop(0)
 
     def reiniciarVidas(self, numVidas):
         self.imagenes = []
@@ -72,4 +72,4 @@ class vidasPacman(HojadeImagenes):
             self.imagenes.append(self.getImagen(0,0))
 
     def getImagen(self, x, y):
-        return HojadeImagenes.getImagen(self,x ,y, 2*ANCHOCASILLA, 2*ALTOCASILLA)
+        return HojadeSprites.getImagen(self,x ,y, 2*ANCHOCASILLA, 2*ALTOCASILLA)

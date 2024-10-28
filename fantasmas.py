@@ -4,7 +4,7 @@ from vector import Vector
 from constantes import *
 from entidad import Entidad
 from estadofantasmas import ModoControlador
-from imagenes import ImagendeFantasmas
+from sprites import ImagendeFantasmas
 
 class Fantasma (Entidad):
     def __init__(self, nodo, pacman=None, blinky=None):

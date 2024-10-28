@@ -1,6 +1,6 @@
-class Pausa(object):
-    def __init__(self, pausa = False):
-        self.pausa = pausa
+class Pausador(object):
+    def __init__(self, pausado = False):
+        self.pausado = pausado
         self.timer = 0
         self.tiempoPausa = None
         self.func = None
@@ -10,7 +10,7 @@ class Pausa(object):
             self.timer += dt
             if self.timer >= self.tiempoPausa:
                 self.timer = 0
-                self.pausa = False
+                self.pausado = False
                 self.tiempoPausa = None
                 return self.func
         return None
@@ -22,4 +22,4 @@ class Pausa(object):
         self.cambiar()
 
     def cambiar(self):
-        self.pausa = not self.pausa
+        self.pausado = not self.pausado
