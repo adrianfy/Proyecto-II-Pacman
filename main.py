@@ -1,8 +1,6 @@
 import pygame
 import sys
-#from controladorJuego import *
-# Iniciar programa
-
+from constantes import *
 
 pygame.init()
 
@@ -14,10 +12,10 @@ AMARILLO = (255, 255, 0)
 
 # Pantalla
 
-pantalla = pygame.display.set_mode((750, 800))
+pantalla = pygame.display.set_mode(TAMANNOPANTALLA, 0, 32)
 pygame.display.set_caption("Pacman Menu")
 
-fuente = pygame.font.Font('Recursos/Fuentes/PressStart2P-Regular.ttf', 35)
+fuente = pygame.font.Font('Recursos/Fuentes/PressStart2P-Regular.ttf', 20)
 
 opcionesMenu = ["Jugar", "Modo de Juego: Clasico", "Silenciar musica: no","Salir"]
 opcionSeleccionada = 0
@@ -25,7 +23,9 @@ modoDeJuego = "Clasico"
 musica_Activada = True
 
 imagenTituloClasico = pygame.image.load('Recursos/Menus/PacmanTitulo.png')
+imagenTituloClasico = pygame.transform.scale(imagenTituloClasico, (400, 150))
 imagenTituloTigre = pygame.image.load('Recursos/Menus/PacmanMondeVil.png')
+imagenTituloTigre = pygame.transform.scale(imagenTituloTigre, (400, 150))
 imagenTitulo = imagenTituloClasico
 
 # Musica
@@ -64,14 +64,14 @@ def silenciar():
 def menu():
     pantalla.fill(NEGRO)
 
-    tituloRect = imagenTitulo.get_rect(center=(pantalla.get_width() // 2, 200))
+    tituloRect = imagenTitulo.get_rect(center=(pantalla.get_width() // 2, 120))
     pantalla.blit(imagenTitulo, tituloRect)
 
     for i, opcion in enumerate(opcionesMenu):
         color = AMARILLO if i == opcionSeleccionada else BLANCO
         textoSuperficie = fuente.render(opcion, True, color)
 
-        textoRect = textoSuperficie.get_rect(center=(pantalla.get_width() // 2, 350 + i * 100))
+        textoRect = textoSuperficie.get_rect(center=(pantalla.get_width() // 2, 300 + i * 50))
         pantalla.blit(textoSuperficie, textoRect)
 
     

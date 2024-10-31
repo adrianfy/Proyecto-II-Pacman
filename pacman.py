@@ -37,6 +37,7 @@ class Pacman(Entidad):
         self.posicion = self.nodo.posicion.copia()
 
     def actualizar(self, dt):
+        self.sprites.actualizar(dt)
         self.posicion += self.direcciones[self.direccion]*self.velocidad*dt
         direccion = self.getTeclaValida()
         if self.objetivoRebasado():

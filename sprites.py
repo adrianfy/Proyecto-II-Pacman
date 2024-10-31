@@ -1,6 +1,7 @@
 import pygame
 from constantes import *
 import numpy as np
+from animacion import Animador
 
 ANCHOCASILLABASE = 16
 ALTOCASILLABASE = 16
@@ -25,6 +26,9 @@ class ImagendePacman(HojadeSprites):
         HojadeSprites.__init__(self)
         self.entidad = entidad
         self.entidad.imagen = self.getIniciodeImagen()
+        self.animaciones = {}
+        self.definirAnimacion()
+        self.pararImagen = (8, 0)
 
     def getIniciodeImagen(self):
         return self.getImagen(8,0)
@@ -32,6 +36,32 @@ class ImagendePacman(HojadeSprites):
     def getImagen(self, x, y):
         return HojadeSprites.getImagen(self, x, y, 2 * ANCHOCASILLA, 2 * ALTOCASILLA)
     
+    def definirAnimacion(self):
+        self.animaciones[IZQUIERDA] = Animador(((8, 0), (0, 0), (0, 2), (0, 0)))
+        self.animaciones[DERECHA] = Animador(((10, 0), (2, 0), (2, 2), (2, 0)))
+        self.animaciones[ARRIBA] = Animador(((10, 2), (6, 0), (6, 2), (6, 0)))
+        self.animaciones[ABAJO] = Animador(((8, 2), (4, 0), (4, 2), (4, 0)))
+
+    def actualizar(self, dt):
+        if self.entidad.direccion == IZQUIERDA:
+            self.entidad.imagen == self.getImagen(*self.animaciones[IZQUIERDA].actualizar(dt))
+            self.pararImagen = (8, 0)
+        elif self.entidad.direccion == DERECHA:
+            self.entidad.imagen == self.getImagen(*self.animaciones[DERECHA].actualizar(dt))
+            self.pararImagen = (10, 0)
+        elif self.entidad.direccion == ABAJO:
+            self.entidad.imagen == self.getImagen(*self.animaciones[ABAJO].actualizar(dt))
+            self.pararImagen = (8, 2)
+        elif self.entidad.direccion == ARRIBA:
+            self.entidad.imagen == self.getImagen(*self.animaciones[ARRIBA].actualizar(dt))
+            self.pararImagen = (10, 2)
+        elif self.entidad.direccion == DETENER:
+            self.entidad.imagen == self.getImagen(*self.pararImagen)
+
+    def reiniciar(self):
+        for key in list(self.animaciones.keys()):
+            self.animaciones[key].reiniciar()
+
 class ImagendeFantasmas(HojadeSprites):
     def __init__(self, entidad):
         HojadeSprites.__init__(self)
@@ -44,6 +74,30 @@ class ImagendeFantasmas(HojadeSprites):
     
     def getImagen(self, x, y):
         return HojadeSprites.getImagen(self, x, y, 2* ANCHOCASILLA, 2* ALTOCASILLA)
+    
+    def actualizar(self, dt):
+        x = self.x[self.entidad.nombre]
+        if self.entidad.modo.actual in [DISPERCION, PERSEGUIR]:
+            if self.entidad.direccion == IZQUIERDA:
+                 self.entidad.imagen = self.getImagen(x, 8)
+            elif self.entidad.direccion == DERECHA:
+                  self.entidad.imagen = self.getImagen(x, 10)
+            elif self.entidad.direccion == ABAJO:
+                  self.entidad.imagen = self.getImagen(x, 6)
+            elif self.entidad.direccion == ARRIBA:
+                  self.entidad.imagen = self.getImagen(x, 4)
+        elif self.entidad.modo.actual == CARGA:
+            self.entidad.imagen = self.getImagen(10, 4)
+        elif self.entidad.modo.actual == SPAWN:
+            if self.entidad.direccion == IZQUIERDA:
+                self.entidad.imagen = self.getImagen(8, 8)
+            elif self.entidad.direccion == DERECHA:
+                self.entidad.imagen = self.getImagen(8, 10)
+            elif self.entidad.direccion == ABAJO:
+                self.entidad.imagen = self.getImagen(8, 6)
+            elif self.entidad.direccion == ARRIBA:
+                self.entidad.imagen = self.getImagen(8, 4)
+
     
 class imagendeFrutas(HojadeSprites):
     def __init__(self, entidad):
@@ -73,3 +127,34 @@ class vidasPacman(HojadeSprites):
 
     def getImagen(self, x, y):
         return HojadeSprites.getImagen(self,x ,y, 2*ANCHOCASILLA, 2*ALTOCASILLA)
+    
+
+class laberintoSprites(HojadeSprites):
+    def __init__(self, archivoLaberinto, archivoRot):
+        HojadeSprites.__init__(self)
+        self.datos = self.leerArchivoLaberinto(archivoLaberinto)
+        self.archivoRot = self.leerArchivoLaberinto(archivoRot)
+
+        def getImagen(self, x, y):
+            return HojadeSprites.getImagen(self, x, y, ANCHOCASILLA, ALTOCASILLA)
+        
+        def leerArchivoLaberinto(self, archivoLaberinto):
+            return np.loadtxt(archivoLaberinto, dtype='<U1')
+        
+        def construirFondo(self, fondo, y):
+            for fila in list(range(self.datos.forma[0])):
+                for col in list(range(self.datos.forma[1])):
+                    if self.datos[fila][col].isdigit(): #revisar nombres
+                        x = int(self.datos[fila][col]) + 12
+                        sprite = self.getImagen(x, y)
+                        rotval = int(self.rotDatos[fila][col])#revisar nombres
+                        sprite = self.rotAte(sprite, rotval)#revisar nombres
+                        fondo.blit(sprite, (col*ANCHOCASILLA, fila*ALTOCASILLA)) #revisar nombres
+                    elif self.datos[fila][col] == '=':
+                        sprite = self.getImagen(10, 8)
+                        fondo.blint(sprite, (col*ANCHOCASILLA, fila*ALTOCASILLA))
+
+            return fondo
+        
+        def rotAte(self, sprite, valor): #revisar nombres
+            return pygame.transform.rotate(sprite, valor*90)

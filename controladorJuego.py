@@ -9,6 +9,7 @@ from fruta import Fruta
 from pausador import Pausador
 from texto import GrupoTexto
 from sprites import vidasPacman
+from sprites import laberintoSprites
 
 class ControladorJuego(object):
     def __init__(self):
@@ -55,6 +56,8 @@ class ControladorJuego(object):
 
     def iniciarJuego(self):
         self.setFondopantalla()
+        self.spriteLaberinto = laberintoSprites("laberinto.txt")#falta archivo txt / graphical mazes 2
+        self.fondo = self.spriteLaberinto.construirFondo(self.fondo, self.nivel%5)
         self.nodos = GrupoNodos("laberinto.txt")
         self.nodos.setPortales((0,17),(27,17))
         casita = self.nodos.crearCasitaFantasmas(11.5, 14)
@@ -181,7 +184,6 @@ class ControladorJuego(object):
 
     def renderizar(self):
         self.pantalla.blit(self.fondopantalla, (0,0))
-        self.nodos.renderizar(self.pantalla)
         self.bolitas.renderizar(self.pantalla)
         if self.fruta is not None:
             self.fruta.renderizar(self.pantalla)

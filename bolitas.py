@@ -8,14 +8,13 @@ class Bolitas(object):
         self.nombre = BOLITA
         self.posicion = Vector(columna*ANCHOCASILLA, fila*ALTOCASILLA)
         self.color = BLANCO
-        self.radio = int(4*ANCHOCASILLA / 16)
-        self.radioColision = int(4*ANCHOCASILLA / 16)
         self.puntos = 10
         self.visibilidad = True
 
     def renderizar(self, pantalla):
         if self.visibilidad:
-            p = self.posicion.coordenadaInt()
+            ajustar = Vector(ANCHOCASILLA, ALTOCASILLA) / 2
+            p = self.posicion + ajustar
             pygame.draw.circle(pantalla, self.color, p, self.radio)
 
 class BolitaGrande(Bolitas):

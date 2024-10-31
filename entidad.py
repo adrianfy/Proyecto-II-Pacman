@@ -118,7 +118,9 @@ class Entidad(object):
     def renderizar(self, pantalla):
         if self.visibilidad:
             if self.imagen is not None:
-                pantalla.blit(self.imagen, self.posicion.coordenadaTupla())
+                ajustar = Vector(ANCHOCASILLA, ALTOCASILLA) / 2
+                p = self.posicion - ajustar
+                pantalla.blint(self.imagen, p.coordenadaTupla())
             else:
                 p = self.posicion.coordenadaInt()
                 pygame.draw.circle(pantalla, self.color, p, self.radio)

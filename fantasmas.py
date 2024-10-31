@@ -19,6 +19,7 @@ class Fantasma (Entidad):
         self.nodoCasita = nodo
 
     def actualizar(self, dt):
+        self.sprites.actualizar(dt)
         self.modo.actualizar(dt)
         
         if self.modo.actual is DISPERCION:
