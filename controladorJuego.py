@@ -224,8 +224,8 @@ class ControladorJuego(object):
 
         pygame.display.update()
 
-if __name__ == "__main__":
-    juego = ControladorJuego()
-    juego.iniciarJuego()
-    while True:
-        juego.actualizar()
+# if __name__ == "__main__":
+#     juego = ControladorJuego()
+#     juego.iniciarJuego()
+#     while True:
+#         juego.actualizar()

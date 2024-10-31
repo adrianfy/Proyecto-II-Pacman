@@ -1,6 +1,7 @@
 import pygame
 import sys
 from constantes import *
+from controladorJuego import ControladorJuego
 
 pygame.init()
 
@@ -78,6 +79,7 @@ def menu():
     pygame.display.flip()
 
 def menuPrincipal():
+    juego = ControladorJuego()
     global opcionSeleccionada, modoDeJuego
     jugando = True
 
@@ -97,11 +99,10 @@ def menuPrincipal():
 
                 elif evento.key == pygame.K_RETURN:
                      if opcionSeleccionada == 0:  # Jugar
-                         
-                         #iniciarJuego(modoDeJuego)  # Llamada al juego con el modo seleccionado
-                         pantalla.fill(NEGRO)
-                         #juego.iniciarJuego()
-                         pygame.display.flip()
+                        pygame.mixer.music.stop()
+                        juego.iniciarJuego()
+                        while True:
+                            juego.actualizar()
 
                      elif opcionSeleccionada == 1:  # Cambiar modo de juego
                          cambiarModoDeJuego()
