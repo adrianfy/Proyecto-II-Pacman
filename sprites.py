@@ -133,28 +133,28 @@ class laberintoSprites(HojadeSprites):
     def __init__(self, archivoLaberinto, archivoRot):
         HojadeSprites.__init__(self)
         self.datos = self.leerArchivoLaberinto(archivoLaberinto)
-        self.archivoRot = self.leerArchivoLaberinto(archivoRot)
+        self.rotdata = self.leerArchivoLaberinto(archivoRot)
 
-        def getImagen(self, x, y):
+    def getImagen(self, x, y):
             return HojadeSprites.getImagen(self, x, y, ANCHOCASILLA, ALTOCASILLA)
         
-        def leerArchivoLaberinto(self, archivoLaberinto):
+    def leerArchivoLaberinto(self, archivoLaberinto):
             return np.loadtxt(archivoLaberinto, dtype='<U1')
         
-        def construirFondo(self, fondo, y):
-            for fila in list(range(self.datos.forma[0])):
-                for col in list(range(self.datos.forma[1])):
-                    if self.datos[fila][col].isdigit(): #revisar nombres
+    def construirFondo(self, fondopantalla, y):
+        for fila in list(range(self.datos.shape[0])):
+            for col in list(range(self.datos.shape[1])):
+                if self.datos[fila][col].isdigit(): #revisar nombres
                         x = int(self.datos[fila][col]) + 12
                         sprite = self.getImagen(x, y)
-                        rotval = int(self.rotDatos[fila][col])#revisar nombres
-                        sprite = self.rotAte(sprite, rotval)#revisar nombres
-                        fondo.blit(sprite, (col*ANCHOCASILLA, fila*ALTOCASILLA)) #revisar nombres
-                    elif self.datos[fila][col] == '=':
+                        rotval = int(self.rotdata[fila][col])#revisar nombres
+                        sprite = self.rotate(sprite, rotval)#revisar nombres
+                        fondopantalla.blit(sprite, (col*ANCHOCASILLA, fila*ALTOCASILLA)) #revisar nombres
+                elif self.datos[fila][col] == '=':
                         sprite = self.getImagen(10, 8)
-                        fondo.blint(sprite, (col*ANCHOCASILLA, fila*ALTOCASILLA))
+                        fondopantalla.blit(sprite, (col*ANCHOCASILLA, fila*ALTOCASILLA))
 
-            return fondo
+        return fondopantalla
         
-        def rotAte(self, sprite, valor): #revisar nombres
-            return pygame.transform.rotate(sprite, valor*90)
+    def rotate(self, sprite, valor): #revisar nombres
+        return pygame.transform.rotate(sprite, valor*90)

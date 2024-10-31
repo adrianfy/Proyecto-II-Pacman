@@ -56,8 +56,8 @@ class ControladorJuego(object):
 
     def iniciarJuego(self):
         self.setFondopantalla()
-        self.spriteLaberinto = laberintoSprites("laberinto.txt")#falta archivo txt / graphical mazes 2
-        self.fondo = self.spriteLaberinto.construirFondo(self.fondo, self.nivel%5)
+        self.spriteLaberinto = laberintoSprites("laberinto.txt", "rotacionLaberinto.txt") #falta archivo txt / graphical mazes 2
+        self.fondopantalla = self.spriteLaberinto.construirFondo(self.fondopantalla, self.nivel%5)
         self.nodos = GrupoNodos("laberinto.txt")
         self.nodos.setPortales((0,17),(27,17))
         casita = self.nodos.crearCasitaFantasmas(11.5, 14)

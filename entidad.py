@@ -120,7 +120,7 @@ class Entidad(object):
             if self.imagen is not None:
                 ajustar = Vector(ANCHOCASILLA, ALTOCASILLA) / 2
                 p = self.posicion - ajustar
-                pantalla.blint(self.imagen, p.coordenadaTupla())
+                pantalla.blit(self.imagen, p.coordenadaTupla())
             else:
                 p = self.posicion.coordenadaInt()
                 pygame.draw.circle(pantalla, self.color, p, self.radio)
