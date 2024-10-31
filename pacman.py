@@ -21,13 +21,15 @@ class Pacman(Entidad):
         self.radioColision = 5
         self.setEntreNodos(IZQUIERDA)
         self.vivo = True
-        self.imagen = ImagendePacman(self)
+        self.sprites = ImagendePacman(self)
 
     def reiniciar(self):
         Entidad.reiniciar(self)
         self.direccion = IZQUIERDA
         self.setEntreNodos(IZQUIERDA)
         self.vivo = True
+        self.imagen = self.sprites.getIniciodeImagen()
+        self.sprites.reiniciar()
 
     def muerto(self):
         self.vivo = False
@@ -118,6 +120,6 @@ class Pacman(Entidad):
             return True
         return False
 
-    def renderizar(self, pantalla):
-        p = self.posicion.coordenadaInt()
-        pygame.draw.circle(pantalla, self.color, p, self.radio)
+    # def renderizar(self, pantalla):
+    #     p = self.posicion.coordenadaInt()
+    #     pygame.draw.circle(pantalla, self.color, p, self.radio)

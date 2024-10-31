@@ -104,7 +104,7 @@ class GrupoNodos(object):
         key2 = self.constructKey(*portal2)
         if key1 in self.nodosLUT.keys() and key2 in self.nodosLUT.keys():
             self.nodosLUT[key1].definirConexion[PORTAL] = self.nodosLUT[key2]
-            self.nodosLUT[key2].definirConexion[PORTAL] = self.nodosLUT[key2]
+            self.nodosLUT[key2].definirConexion[PORTAL] = self.nodosLUT[key1]
 
     def crearCasitaFantasmas(self, xoffset, yoffset):
         casitadata = np.array([['X','X','+','X','X'],
@@ -133,7 +133,7 @@ class GrupoNodos(object):
         if nodo is not None:
             nodo.accesoDenegado(direccion,entidad)
 
-    def accesoPermitido(self, col, fila, direccion,entidad):
+    def accesoPermitido(self, col, fila, direccion, entidad):
           nodo = self.getNododesdeCasillas(col,fila)
           if nodo is not None:
               nodo.accesoPermitido(direccion,entidad)

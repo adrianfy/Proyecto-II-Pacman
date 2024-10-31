@@ -2,8 +2,9 @@ from constantes import *
 
 class ModoPrincipal(object):
     def __init__(self):
-        self.dispersion()
+        
         self.timer = 0
+        self.dispersion()
 
     def actualizar(self, dt):
         self.timer += dt
@@ -29,11 +30,11 @@ class ModoControlador(object):
         self.tiempo = None
         self.modoPrincipal = ModoPrincipal()
         self.actual = self.modoPrincipal.modo
-        self.entidad =entidad
+        self.entidad = entidad
 
     def actualizar(self, dt):
         self.modoPrincipal.actualizar(dt)
-        if self.actual is CARGA:
+        if self.actual is ASUSTADO:
             self.timer += dt
             if self.timer >= self.tiempo:
                 self.tiempo = None
@@ -48,16 +49,16 @@ class ModoControlador(object):
                     self.actual = self.modoPrincipal.modo
 
     def setSpawnModo(self):
-        if self.actual is CARGA:
+        if self.actual is ASUSTADO:
             self.actual = SPAWN                
         
 
-    def setModoCarga(self):
+    def setModoAsustado(self):
         if self.actual in [DISPERCION,PERSEGUIR]:
             self.timer = 0
-            self.time = 7
-            self.actual = CARGA
-        elif self.actual is CARGA:
+            self.tiempo = 7
+            self.actual = ASUSTADO
+        elif self.actual is ASUSTADO:
             self.timer = 0
 
 

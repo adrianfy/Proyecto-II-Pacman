@@ -5,6 +5,7 @@ from animacion import Animador
 
 ANCHOCASILLABASE = 16
 ALTOCASILLABASE = 16
+MUERTE = 5
 
 class HojadeSprites(object):
     def __init__(self):
@@ -41,22 +42,26 @@ class ImagendePacman(HojadeSprites):
         self.animaciones[DERECHA] = Animador(((10, 0), (2, 0), (2, 2), (2, 0)))
         self.animaciones[ARRIBA] = Animador(((10, 2), (6, 0), (6, 2), (6, 0)))
         self.animaciones[ABAJO] = Animador(((8, 2), (4, 0), (4, 2), (4, 0)))
+        self.animaciones[MUERTE] = Animador(((0, 12), (2, 12), (4, 12), (6, 12), (8, 12), (10, 12), (12, 12), (14, 12), (16, 12), (18, 12), (20, 12)), velocidad=6, bucle=False)
 
     def actualizar(self, dt):
-        if self.entidad.direccion == IZQUIERDA:
-            self.entidad.imagen == self.getImagen(*self.animaciones[IZQUIERDA].actualizar(dt))
-            self.pararImagen = (8, 0)
-        elif self.entidad.direccion == DERECHA:
-            self.entidad.imagen == self.getImagen(*self.animaciones[DERECHA].actualizar(dt))
-            self.pararImagen = (10, 0)
-        elif self.entidad.direccion == ABAJO:
-            self.entidad.imagen == self.getImagen(*self.animaciones[ABAJO].actualizar(dt))
-            self.pararImagen = (8, 2)
-        elif self.entidad.direccion == ARRIBA:
-            self.entidad.imagen == self.getImagen(*self.animaciones[ARRIBA].actualizar(dt))
-            self.pararImagen = (10, 2)
-        elif self.entidad.direccion == DETENER:
-            self.entidad.imagen == self.getImagen(*self.pararImagen)
+        if self.entidad.vivo == True:
+            if self.entidad.direccion == IZQUIERDA:
+                self.entidad.imagen = self.getImagen(*self.animaciones[IZQUIERDA].actualizar(dt))
+                self.pararImagen = (8, 0)
+            elif self.entidad.direccion == DERECHA:
+                self.entidad.imagen = self.getImagen(*self.animaciones[DERECHA].actualizar(dt))
+                self.pararImagen = (10, 0)
+            elif self.entidad.direccion == ABAJO:
+                self.entidad.imagen = self.getImagen(*self.animaciones[ABAJO].actualizar(dt))
+                self.pararImagen = (8, 2)
+            elif self.entidad.direccion == ARRIBA:
+                self.entidad.imagen = self.getImagen(*self.animaciones[ARRIBA].actualizar(dt))
+                self.pararImagen = (10, 2)
+            elif self.entidad.direccion == DETENER:
+                self.entidad.imagen = self.getImagen(*self.pararImagen)
+        else:
+            self.entidad.imagen = self.getImagen(*self.animaciones[MUERTE].actualizar(dt))
 
     def reiniciar(self):
         for key in list(self.animaciones.keys()):
@@ -86,7 +91,7 @@ class ImagendeFantasmas(HojadeSprites):
                   self.entidad.imagen = self.getImagen(x, 6)
             elif self.entidad.direccion == ARRIBA:
                   self.entidad.imagen = self.getImagen(x, 4)
-        elif self.entidad.modo.actual == CARGA:
+        elif self.entidad.modo.actual == ASUSTADO:
             self.entidad.imagen = self.getImagen(10, 4)
         elif self.entidad.modo.actual == SPAWN:
             if self.entidad.direccion == IZQUIERDA:

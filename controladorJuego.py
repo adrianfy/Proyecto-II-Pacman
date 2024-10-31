@@ -16,6 +16,8 @@ class ControladorJuego(object):
         pygame.init()
         self.pantalla = pygame.display.set_mode(TAMANNOPANTALLA, 0, 32)
         self.fondopantalla = None
+        self.fondopantalla_normal = None
+        self.fondopantalla_flash = None
         self.reloj = pygame.time.Clock()
         self.fruta = None
         self.pausador = Pausador(True)
@@ -24,6 +26,9 @@ class ControladorJuego(object):
         self.puntaje = 0
         self.grupotexto = GrupoTexto()
         self.vidasPacman = vidasPacman(self.vidas)
+        self.flashBG = False
+        self.flashtiempo = 0.2
+        self.flashtimer = 0
 
     def restaurarJuego(self):
         self.pausador.pausado = True
@@ -51,15 +56,20 @@ class ControladorJuego(object):
         self.grupotexto.actualizarNivel(self.nivel)
 
     def setFondopantalla(self):
-        self.fondopantalla = pygame.surface.Surface(TAMANNOPANTALLA).convert()
-        self.fondopantalla.fill(NEGRO)
+        self.fondopantalla_normal = pygame.surface.Surface(TAMANNOPANTALLA).convert()
+        self.fondopantalla_normal.fill(NEGRO)
+        self.fondopantalla_flash = pygame.surface.Surface(TAMANNOPANTALLA).convert()
+        self.fondopantalla_flash.fill(NEGRO)
+        self.fondopantalla_normal = self.spriteLaberinto.construirFondo(self.fondopantalla_normal, self.nivel % 5)
+        self.fondopantalla_flash = self.spriteLaberinto.construirFondo(self.fondopantalla_flash, 5)
+        self.flashBG = False
+        self.fondopantalla = self.fondopantalla_normal
 
     def iniciarJuego(self):
+        self.spriteLaberinto = laberintoSprites("laberinto.txt", "rotacionLaberinto.txt")
         self.setFondopantalla()
-        self.spriteLaberinto = laberintoSprites("laberinto.txt", "rotacionLaberinto.txt") #falta archivo txt / graphical mazes 2
-        self.fondopantalla = self.spriteLaberinto.construirFondo(self.fondopantalla, self.nivel%5)
         self.nodos = GrupoNodos("laberinto.txt")
-        self.nodos.setPortales((0,17),(27,17))
+        self.nodos.setPortales((0,17), (27,17))
         casita = self.nodos.crearCasitaFantasmas(11.5, 14)
         self.nodos.connectarNodosCasita(casita, (12,14), IZQUIERDA)
         self.nodos.connectarNodosCasita(casita, (15,14), DERECHA)
@@ -90,13 +100,28 @@ class ControladorJuego(object):
         self.grupotexto.actualizar(dt)
         self.bolitas.actualizar(dt)
         if not self.pausador.pausado:
-            self.pacman.actualizar(dt)
             self.fantasmas.actualizar(dt)
             if self.fruta is not None:
                 self.fruta.actualizar(dt)
             self.verEventoBolitas()
             self.verEventoFantasmas()
             self.verEventoFruta()
+
+        if self.pacman.vivo:
+            if not self.pausador.pausado:
+                self.pacman.actualizar(dt)
+        else:
+            self.pacman.actualizar(dt)
+
+        if self.flashBG:
+            self.flashtimer += dt
+            if self.flashtimer >= self.flashtiempo:
+                self.flashtimer = 0
+                if self.fondopantalla == self.fondopantalla_normal:
+                    self.fondopantalla = self.fondopantalla_flash
+                else:
+                    self.fondopantalla = self.fondopantalla_normal
+
         despuesdePausar = self.pausador.actualizar(dt)
         if despuesdePausar is not None:
             despuesdePausar()
@@ -110,11 +135,11 @@ class ControladorJuego(object):
     def verEventoFantasmas(self):
         for fantasma in self.fantasmas:
             if self.pacman.colisionFantasma(fantasma):
-                if fantasma.modo.actual is CARGA:
+                if fantasma.modo.actual is ASUSTADO:
                     self.pacman.visibilidad = False
                     fantasma.visibilidad = False
                     self.actualizarPuntaje(fantasma.puntos)
-                    self.grupotexto.insertarTexto(str(fantasma.puntos), BLANCO, fantasma.posicion.y, 8, tiempo=1)
+                    self.grupotexto.insertarTexto(str(fantasma.puntos), BLANCO, fantasma.posicion.x, fantasma.posicion.y, 8, tiempo=1)
                     self.fantasmas.actualizarPuntos()
                     self.pausador.setPausa(tiempoPausa=1, func=self.mostrarEntidades)
                     fantasma.iniciarSpawn()
@@ -156,6 +181,7 @@ class ControladorJuego(object):
             if bolitas.nombre == BOLITAGRANDE:
                 self.fantasmas.iniciarSusto()
             if self.bolitas.isEmpty():
+                self.flashBG = True
                 self.esconderEntidades()
                 self.pausador.setPausa(tiempoPausa=3, func=self.siguienteNivel)
 
@@ -192,8 +218,8 @@ class ControladorJuego(object):
         self.grupotexto.renderizar(self.pantalla)
 
         for i in range(len(self.vidasPacman.imagenes)):
-            x = self.vidasPacman.imagenes[1].get_width() * i
-            y = ANCHOPANTALLA - self.vidasPacman.imagenes[i].get_height()
+            x = self.vidasPacman.imagenes[i].get_width() * i
+            y = ALTOPANTALLA - self.vidasPacman.imagenes[i].get_height()
             self.pantalla.blit(self.vidasPacman.imagenes[i], (x, y))
 
         pygame.display.update()

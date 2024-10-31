@@ -35,8 +35,8 @@ class Fantasma (Entidad):
         self.meta = self.pacman.posicion
 
     def iniciarSusto(self):
-        self.modo.setModoCarga()
-        if self.modo.actual == CARGA:
+        self.modo.setModoAsustado()
+        if self.modo.actual == ASUSTADO:
             self.setVelocidad(50)
             self.metodoDireccion = self.direccionAleatoria
 
@@ -52,7 +52,7 @@ class Fantasma (Entidad):
         self.spawnNodo = nodo
 
     def iniciarSpawn(self):
-        self.modo.setSpawnMode()
+        self.modo.setSpawnModo()
         if self.modo.actual == SPAWN:
             self.setVelocidad(150)
             self.metodoDireccion = self.direccionMeta
@@ -63,14 +63,14 @@ class Blinky(Fantasma):
         Fantasma.__init__(self, nodo, pacman, blinky)
         self.nombre = BLINKY
         self.color = ROJO
-        self.imagenes = ImagendeFantasmas(self)
+        self.sprites = ImagendeFantasmas(self)
 
 class Pinky(Fantasma):
     def __init__(self, nodo, pacman=None, blinky=None):
         Fantasma.__init__(self, nodo, pacman, blinky)
         self.nombre = PINKY
         self.color = ROSADO
-        self.imagenes = ImagendeFantasmas(self)
+        self.sprites = ImagendeFantasmas(self)
 
     def disperccion(self):
         self.meta = Vector(ANCHOCASILLA*COLUMNA, 0)
@@ -83,7 +83,7 @@ class Inky(Fantasma):
         Fantasma.__init__(self, nodo, pacman, blinky)
         self.nombre = INKY
         self.color = CYAN
-        self.imagenes = ImagendeFantasmas(self)
+        self.sprites = ImagendeFantasmas(self)
     
     def disperccion(self):
         self.meta = Vector(ANCHOCASILLA * COLUMNA, ALTOCASILLA * FILA)
@@ -98,7 +98,7 @@ class Clyde(Fantasma):
         Fantasma.__init__(self, nodo, pacman, blinky)
         self.nombre = CLYDE
         self.color = NARANJA
-        self.imagenes = ImagendeFantasmas(self)
+        self.sprites = ImagendeFantasmas(self)
 
     def disperccion(self):
         self.goal = Vector(0, ANCHOCASILLA * FILA)
@@ -115,7 +115,7 @@ class GrupoFantasma(object):
     def __init__(self, nodo, pacman):
         self.blinky = Blinky(nodo, pacman)
         self.pinky = Pinky(nodo, pacman)
-        self.inky = Inky(nodo, pacman)
+        self.inky = Inky(nodo, pacman, self.blinky)
         self.clyde = Clyde(nodo, pacman)
         self.fantasmas = [self.blinky, self.pinky, self.inky, self.clyde]
     
@@ -144,9 +144,11 @@ class GrupoFantasma(object):
             fantasma.puntos = 200
 
     def reiniciar(self):
-        Entidad.reiniciar(self)
-        self.puntos = 200
-        self.metodoDireccion = self.direccionMeta
+        for fantasma in self:
+            fantasma.reiniciar()
+        # Entidad.reiniciar(self)
+        # self.puntos = 200
+        # self.metodoDireccion = self.direccionMeta
 
     def esconderse(self):
         for fantasma in self:
