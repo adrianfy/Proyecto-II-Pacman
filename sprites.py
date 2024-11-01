@@ -105,13 +105,14 @@ class ImagendeFantasmas(HojadeSprites):
 
     
 class imagendeFrutas(HojadeSprites):
-    def __init__(self, entidad):
+    def __init__(self, entidad, nivel):
         HojadeSprites.__init__(self)
         self.entidad = entidad
-        self.entidad.imagen = self.getIniciodeImagen()
+        self.frutas = {0:(16,8), 1:(18,8), 2:(20,8), 3:(16,10), 4:(18,10), 5:(20,10)}
+        self.entidad.imagen = self.getIniciodeImagen(nivel % len(self.frutas))
 
-    def getIniciodeImagen(self):
-        return self.getImagen(16,8)
+    def getIniciodeImagen(self, key):
+        return self.getImagen(*self.frutas[key])
     
     def getImagen(self, x, y):
         return HojadeSprites.getImagen(self, x, y, 2*ANCHOCASILLA, 2*ALTOCASILLA)

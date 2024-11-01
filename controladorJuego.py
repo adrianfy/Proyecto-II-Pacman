@@ -29,6 +29,7 @@ class ControladorJuego(object):
         self.flashBG = False
         self.flashtiempo = 0.2
         self.flashtimer = 0
+        self.capturarFruta = []
 
     def restaurarJuego(self):
         self.pausador.pausado = True
@@ -36,6 +37,7 @@ class ControladorJuego(object):
         self.fantasmas.reiniciar()
         self.fruta = None
         self.grupotexto.mostrarTexto(INICIOTXT)
+        self.capturarFruta = []
 
     def reiniciarNivel(self):
         self.vidas = 5
@@ -159,11 +161,18 @@ class ControladorJuego(object):
     def verEventoFruta(self):
         if self.bolitas.numComidas == 50 or self.bolitas.numComidas == 140:
             if self.fruta is None:
-                self.fruta = Fruta(self.nodos.getNododesdeCasillas(9,20))
+                self.fruta = Fruta(self.nodos.getNododesdeCasillas(9,20), self.nivel)
         if self.fruta is not None:
             if self.pacman.verColision(self.fruta):
                 self.actualizarPuntaje(self.fruta.puntaje)
                 self.grupotexto.insertarTexto(str(self.fruta.puntaje), BLANCO, self.fruta.posicion.x, self.fruta.posicion.y, 8, tiempo=1)
+                capturarFruta = False
+                for fruta in self.capturarFruta:
+                    if fruta.get_recompensa() == self.fruta.imagen.get_recompensa():
+                        capturarFruta = True
+                        break
+                if not capturarFruta:
+                    self.capturarFruta.append(self.fruta.imagen)
                 self.fruta = None
             elif self.fruta.desaparecer:
                 self.fruta = None
@@ -221,6 +230,11 @@ class ControladorJuego(object):
             x = self.vidasPacman.imagenes[i].get_width() * i
             y = ALTOPANTALLA - self.vidasPacman.imagenes[i].get_height()
             self.pantalla.blit(self.vidasPacman.imagenes[i], (x, y))
+
+        for i in range(len(self.capturarFruta)):
+            x = ANCHOPANTALLA - self.capturarFruta1[i].get_ancho() * (i+1)
+            y = ALTOPANTALLA - self.capturarFruta[i].get_alto()
+            self.pantalla.blit(self.capturarFruta[i], (x, y))
 
         pygame.display.update()
 
