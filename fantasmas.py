@@ -18,6 +18,11 @@ class Fantasma (Entidad):
         self.blinky = blinky
         self.nodoCasita = nodo
 
+    def reiniciar(self):
+        Entidad.reiniciar(self)
+        self.puntos = 200
+        self.metodoDireccion = self.direccionMeta
+        
     def actualizar(self, dt):
         self.sprites.actualizar(dt)
         self.modo.actualizar(dt)
@@ -146,10 +151,7 @@ class GrupoFantasma(object):
     def reiniciar(self):
         for fantasma in self:
             fantasma.reiniciar()
-        # Entidad.reiniciar(self)
-        # self.puntos = 200
-        # self.metodoDireccion = self.direccionMeta
-
+        
     def esconderse(self):
         for fantasma in self:
             fantasma.visibilidad = False

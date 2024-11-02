@@ -9,16 +9,8 @@ class Pacman(Entidad):
     def __init__(self, nodo):
         Entidad.__init__(self,nodo)
         self.nombre = PACMAN
-        self.direcciones = {DETENER:Vector(), ARRIBA:Vector(0,-1), ABAJO:Vector(0,1), IZQUIERDA:Vector(-1,0), DERECHA:Vector(1,0)}
-        self.direccion = DETENER
-        self.velocidad = 100 * ANCHOCASILLA/16
-        self.radio = 10
         self.color = AMARILLO
         self.direccion = IZQUIERDA
-        self.nodo = nodo
-        #self.setPosicion()
-        self.objetivo = nodo
-        self.radioColision = 5
         self.setEntreNodos(IZQUIERDA)
         self.vivo = True
         self.sprites = ImagendePacman(self)
@@ -35,17 +27,17 @@ class Pacman(Entidad):
         self.vivo = False
         self.direccion = DETENER
 
-    def setPosicion(self):
-        self.posicion = self.nodo.posicion.copia()
+    #def setPosicion(self):
+      #  self.posicion = self.nodo.posicion.copia()
 
     def actualizar(self, dt):
         self.sprites.actualizar(dt)
         self.posicion += self.direcciones[self.direccion]*self.velocidad*dt
         direccion = self.getTeclaValida()
         if self.objetivoRebasado():
+            self.nodo = self.objetivo
             if self.nodo.definirConexion[PORTAL] is not None:
                 self.nodo = self.nodo.definirConexion[PORTAL]
-            self.nodo = self.objetivo
             self.objetivo = self.getNuevoObjetivo(direccion)
             if self.objetivo is not self.nodo:
                 self.direccion = direccion
@@ -58,16 +50,17 @@ class Pacman(Entidad):
             if self.direccionOpuesta(direccion):
                 self.direccionReversa()
 
-    def validarDirreccion(self, direccion):
-        if direccion is not DETENER:
-            if self.nodo.definirConexion[direccion] is not None:
-                return True
-        return False
+   # def validarDirreccion(self, direccion):
+       # if direccion is not DETENER:
+          #  if self.nodo.definirConexion[direccion] is not None:
+             #   return True
+        #return False
 
-    def getNuevoObjetivo(self, direccion):
-        if self.validarDirreccion(direccion):
-            return self.nodo.definirConexion[direccion]
-        return self.nodo
+   # def getNuevoObjetivo(self, direccion):
+      #  if self.validarDirreccion(direccion):
+       #     return self.nodo.definirConexion[direccion]
+      #  return self.nodo
+    
     
     # Movmimiento de Pacman segun las teclas
     def getTeclaValida(self):
@@ -82,26 +75,26 @@ class Pacman(Entidad):
             return DERECHA
         return DETENER
     
-    def objetivoRebasado(self):
-        if self.objetivo is not None:
-            vec1 = self.objetivo.posicion - self.nodo.posicion
-            vec2 = self.posicion - self.nodo.posicion
-            nodoAobjetivo = vec1.magnitudCuadrados()
-            nodoAself = vec2.magnitudCuadrados()
-            return nodoAself >= nodoAobjetivo
-        return False
+   # def objetivoRebasado(self):
+      #  if self.objetivo is not None:
+      #      vec1 = self.objetivo.posicion - self.nodo.posicion
+      #      vec2 = self.posicion - self.nodo.posicion
+       #     nodoAobjetivo = vec1.magnitudCuadrados()
+      #      nodoAself = vec2.magnitudCuadrados()
+       #     return nodoAself >= nodoAobjetivo
+      #  return False
     
-    def direccionReversa(self):
-        self.direccion *= -1
-        temp = self.nodo
-        self.nodo = self.objetivo
-        self.objetivo = temp
+   # def direccionReversa(self):
+    #    self.direccion *= -1
+    #    temp = self.nodo
+    #    self.nodo = self.objetivo
+     #   self.objetivo = temp
 
-    def direccionOpuesta(self, direccion):
-        if direccion is not DETENER:
-            if direccion == self.direccion * -1:
-                return True
-        return False
+   # def direccionOpuesta(self, direccion):
+   #     if direccion is not DETENER:
+   #         if direccion == self.direccion * -1:
+   #             return True
+   #     return False
     
     def bolitasComidas(self,listaBolitas):
         for bolitas in listaBolitas:

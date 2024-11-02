@@ -8,7 +8,7 @@ class Animador(object):
         self.bucle = bucle
         self.dt = 0
         self.finalizado = False
-
+ 
     def reiniciar(self):
         self.actual_cuadros = 0
         self.finalizado = False

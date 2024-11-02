@@ -20,12 +20,6 @@ class Entidad(object):
         self.setNodoInicial(nodo)
         self.imagen = None
 
-    def setNodoInicial(self, nodo):
-        self.nodo = nodo
-        self.nodoInicial = nodo
-        self.objetivo = nodo
-        self.setPosicion()
-
     def actualizar(self, dt):
         self.posicion += self.direcciones[self.direccion]*self.velocidad*dt
 
@@ -100,6 +94,12 @@ class Entidad(object):
             distancias.append(vec.magnitudCuadrados())
         indice = distancias.index(min(distancias))
         return direcciones[indice]
+    
+    def setNodoInicial(self, nodo):
+        self.nodo = nodo
+        self.nodoInicial = nodo
+        self.objetivo = nodo
+        self.setPosicion()
     
     def setEntreNodos(self, direccion):
         if self.nodo.definirConexion[direccion] is not None:

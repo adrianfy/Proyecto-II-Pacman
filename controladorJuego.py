@@ -30,6 +30,7 @@ class ControladorJuego(object):
         self.flashtiempo = 0.2
         self.flashtimer = 0
         self.capturarFruta = []
+        self.nodoFruta = None
 
     def restaurarJuego(self):
         self.pausador.pausado = True
@@ -215,7 +216,7 @@ class ControladorJuego(object):
                          self.mostrarEntidades()
                         else:
                             self.grupotexto.mostrarTexto(PAUSATXT)
-                            self.esconderEntidades()
+                           # self.esconderEntidades()
 
     def renderizar(self):
         self.pantalla.blit(self.fondopantalla, (0,0))

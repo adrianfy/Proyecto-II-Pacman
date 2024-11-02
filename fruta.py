@@ -11,7 +11,7 @@ class Fruta(Entidad):
         self.tiempodevida = 5
         self.timer = 0
         self.desaparecer = False
-        self.puntaje = 100 + nivel *20
+        self.puntaje = 100 + nivel*20
         self.setEntreNodos(DERECHA)
         self.sprites = imagendeFrutas(self, nivel)
 
