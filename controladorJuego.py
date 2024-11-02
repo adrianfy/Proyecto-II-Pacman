@@ -77,6 +77,7 @@ class ControladorJuego(object):
         casita = self.nodos.crearCasitaFantasmas(11.5, 14)
         self.nodos.connectarNodosCasita(casita, (12,14), IZQUIERDA)
         self.nodos.connectarNodosCasita(casita, (15,14), DERECHA)
+        
         self.pacman = Pacman(self.nodos.getNododesdeCasillas(15,26))
         self.bolitas = GrupoBolitas("laberinto.txt")
         self.fantasmas = GrupoFantasma(self.nodos.getIniciarNodoTemp(), self.pacman)

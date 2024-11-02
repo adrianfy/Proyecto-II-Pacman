@@ -2,25 +2,18 @@ import pygame
 from constantes import *
 import numpy as np
 from animacion import Animador
+import config
 
 ANCHOCASILLABASE = 16
 ALTOCASILLABASE = 16
 MUERTE = 5
 
-hojaClasico = pygame.image.load("Recursos/Imagenes/pacman.png")
-hojaMondevil = pygame.image.load("Recursos/Imagenes/pacmanMondevil.png")
-hojaSprite = hojaClasico
-
-def obtenerEleccion(self, MODODEJUEGO):
-     if MODODEJUEGO == "Clasico":
-        self.hojaSprite = self.hojaClasico
-     elif MODODEJUEGO == "El Tigre":
-        self.hojaSprite = self.hojaMondevil
-     return self.hojaSprite
-
 class HojadeSprites(object):
     def __init__(self):
-        self.hojaSprite = hojaSprite.convert()
+        hojaClasico = pygame.image.load("Recursos/Imagenes/pacman.png")
+        hojaMondevil = pygame.image.load("Recursos/Imagenes/pacmanMondevil.png")
+
+        self.hojaSprite = hojaClasico.convert() if config.modoDeJuego == "Clasico" else hojaMondevil.convert()
         transcolor = self.hojaSprite.get_at((0,0))
         self.hojaSprite.set_colorkey(transcolor)
         ancho = int(self.hojaSprite.get_width() / ANCHOCASILLABASE * ANCHOCASILLA)

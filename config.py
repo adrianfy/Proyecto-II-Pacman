@@ -1,0 +1,1 @@
+modoDeJuego = "Clasico"

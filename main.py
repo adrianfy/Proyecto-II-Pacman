@@ -2,6 +2,7 @@ import pygame
 import sys
 from constantes import *
 from controladorJuego import ControladorJuego
+import config
 
 pygame.init()
 
@@ -20,7 +21,6 @@ fuente = pygame.font.Font('Recursos/Fuentes/PressStart2P-Regular.ttf', 20)
 
 opcionesMenu = ["Jugar", "Modo de Juego: Clasico", "Silenciar musica: no","Salir"]
 opcionSeleccionada = 0
-MODODEJUEGO = "Clasico"
 musica_Activada = True
 
 imagenTituloClasico = pygame.image.load('Recursos/Menus/PacmanTitulo.png')
@@ -35,21 +35,21 @@ pygame.mixer.music.load('Recursos/Audio/PacmanMenu.mp3')
 pygame.mixer.music.play(-1)  # -1 para que la musica se reproduzca en bucle
 
 def cambiarModoDeJuego():
-    global MODODEJUEGO, imagenTitulo
-    if MODODEJUEGO == "Clasico":
-         MODODEJUEGO = "El Tigre"
+    global imagenTitulo
+    if config.modoDeJuego == "Clasico":
+         config.modoDeJuego = "El Tigre"
          imagenTitulo = imagenTituloTigre
          pygame.mixer.music.stop()
          pygame.mixer.music.load('Recursos/Audio/El Gato Callejero Main.mp3')
          pygame.mixer.music.play(-1)
     else:
-         MODODEJUEGO = "Clasico"
+         config.modoDeJuego = "Clasico"
          imagenTitulo = imagenTituloClasico
          pygame.mixer.music.stop()
          pygame.mixer.music.load('Recursos/Audio/PacmanMenu.mp3')
          pygame.mixer.music.play(-1)
 
-opcionesMenu[1] = f"Modo de Juego: {MODODEJUEGO}"
+opcionesMenu[1] = f"Modo de Juego: {config.modoDeJuego}"
 
 def silenciar():
     global musica_Activada
@@ -74,13 +74,12 @@ def menu():
 
         textoRect = textoSuperficie.get_rect(center=(pantalla.get_width() // 2, 300 + i * 50))
         pantalla.blit(textoSuperficie, textoRect)
-
     
     pygame.display.flip()
 
 def menuPrincipal():
     juego = ControladorJuego()
-    global opcionSeleccionada, MODODEJUEGO
+    global opcionSeleccionada
     jugando = True
 
     while jugando:
@@ -103,10 +102,9 @@ def menuPrincipal():
                         juego.iniciarJuego()
                         while True:
                             juego.actualizar()
-
                      elif opcionSeleccionada == 1:  # Cambiar modo de juego
                          cambiarModoDeJuego()
-                         opcionesMenu[1] = f"Modo de Juego: {MODODEJUEGO}"
+                         opcionesMenu[1] = f"Modo de Juego: {config.modoDeJuego}"
                      elif opcionSeleccionada == 2: #silenciar musica
                          silenciar()
                      elif opcionSeleccionada == 3:  # Salir
