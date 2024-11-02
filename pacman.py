@@ -38,29 +38,17 @@ class Pacman(Entidad):
             self.nodo = self.objetivo
             if self.nodo.definirConexion[PORTAL] is not None:
                 self.nodo = self.nodo.definirConexion[PORTAL]
-            self.objetivo = self.getNuevoObjetivo(direccion)
+            self.objetivo = self.objetivoNuevo(direccion)
             if self.objetivo is not self.nodo:
                 self.direccion = direccion
             else:
-                self.objetivo = self.getNuevoObjetivo(self.direccion)
+                self.objetivo = self.objetivoNuevo(self.direccion)
             if self.objetivo is self.nodo:
                 self.direccion = DETENER
             self.setPosicion()
         else:
             if self.direccionOpuesta(direccion):
-                self.direccionReversa()
-
-   # def validarDirreccion(self, direccion):
-       # if direccion is not DETENER:
-          #  if self.nodo.definirConexion[direccion] is not None:
-             #   return True
-        #return False
-
-   # def getNuevoObjetivo(self, direccion):
-      #  if self.validarDirreccion(direccion):
-       #     return self.nodo.definirConexion[direccion]
-      #  return self.nodo
-    
+                self.direccionInversa()
     
     # Movmimiento de Pacman segun las teclas
     def getTeclaValida(self):

@@ -7,9 +7,20 @@ ANCHOCASILLABASE = 16
 ALTOCASILLABASE = 16
 MUERTE = 5
 
+hojaClasico = pygame.image.load("Recursos/Imagenes/pacman.png")
+hojaMondevil = pygame.image.load("Recursos/Imagenes/pacmanMondevil.png")
+hojaSprite = hojaClasico
+
+def obtenerEleccion(self, MODODEJUEGO):
+     if MODODEJUEGO == "Clasico":
+        self.hojaSprite = self.hojaClasico
+     elif MODODEJUEGO == "El Tigre":
+        self.hojaSprite = self.hojaMondevil
+     return self.hojaSprite
+
 class HojadeSprites(object):
     def __init__(self):
-        self.hojaSprite = pygame.image.load("Recursos/Imagenes/pacman.png").convert()
+        self.hojaSprite = hojaSprite.convert()
         transcolor = self.hojaSprite.get_at((0,0))
         self.hojaSprite.set_colorkey(transcolor)
         ancho = int(self.hojaSprite.get_width() / ANCHOCASILLABASE * ANCHOCASILLA)

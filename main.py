@@ -20,7 +20,7 @@ fuente = pygame.font.Font('Recursos/Fuentes/PressStart2P-Regular.ttf', 20)
 
 opcionesMenu = ["Jugar", "Modo de Juego: Clasico", "Silenciar musica: no","Salir"]
 opcionSeleccionada = 0
-modoDeJuego = "Clasico"
+MODODEJUEGO = "Clasico"
 musica_Activada = True
 
 imagenTituloClasico = pygame.image.load('Recursos/Menus/PacmanTitulo.png')
@@ -35,21 +35,21 @@ pygame.mixer.music.load('Recursos/Audio/PacmanMenu.mp3')
 pygame.mixer.music.play(-1)  # -1 para que la musica se reproduzca en bucle
 
 def cambiarModoDeJuego():
-    global modoDeJuego, imagenTitulo
-    if modoDeJuego == "Clasico":
-         modoDeJuego = "El Tigre"
+    global MODODEJUEGO, imagenTitulo
+    if MODODEJUEGO == "Clasico":
+         MODODEJUEGO = "El Tigre"
          imagenTitulo = imagenTituloTigre
          pygame.mixer.music.stop()
          pygame.mixer.music.load('Recursos/Audio/El Gato Callejero Main.mp3')
          pygame.mixer.music.play(-1)
     else:
-         modoDeJuego = "Clasico"
+         MODODEJUEGO = "Clasico"
          imagenTitulo = imagenTituloClasico
          pygame.mixer.music.stop()
          pygame.mixer.music.load('Recursos/Audio/PacmanMenu.mp3')
          pygame.mixer.music.play(-1)
 
-opcionesMenu[1] = f"Modo de Juego: {modoDeJuego}"
+opcionesMenu[1] = f"Modo de Juego: {MODODEJUEGO}"
 
 def silenciar():
     global musica_Activada
@@ -80,7 +80,7 @@ def menu():
 
 def menuPrincipal():
     juego = ControladorJuego()
-    global opcionSeleccionada, modoDeJuego
+    global opcionSeleccionada, MODODEJUEGO
     jugando = True
 
     while jugando:
@@ -106,7 +106,7 @@ def menuPrincipal():
 
                      elif opcionSeleccionada == 1:  # Cambiar modo de juego
                          cambiarModoDeJuego()
-                         opcionesMenu[1] = f"Modo de Juego: {modoDeJuego}"
+                         opcionesMenu[1] = f"Modo de Juego: {MODODEJUEGO}"
                      elif opcionSeleccionada == 2: #silenciar musica
                          silenciar()
                      elif opcionSeleccionada == 3:  # Salir

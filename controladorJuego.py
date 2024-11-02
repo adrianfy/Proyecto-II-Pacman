@@ -12,7 +12,7 @@ from sprites import vidasPacman
 from sprites import laberintoSprites
 
 class ControladorJuego(object):
-    def __init__(self):
+    def __init__(self, modo_juego="Clasico"):
         pygame.init()
         self.pantalla = pygame.display.set_mode(TAMANNOPANTALLA, 0, 32)
         self.fondopantalla = None
@@ -31,6 +31,7 @@ class ControladorJuego(object):
         self.flashtimer = 0
         self.capturarFruta = []
         self.nodoFruta = None
+        self.modo_juego = modo_juego
 
     def restaurarJuego(self):
         self.pausador.pausado = True
