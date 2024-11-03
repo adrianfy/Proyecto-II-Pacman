@@ -77,7 +77,7 @@ class ControladorJuego(object):
         casita = self.nodos.crearCasitaFantasmas(11.5, 14)
         self.nodos.connectarNodosCasita(casita, (12,14), IZQUIERDA)
         self.nodos.connectarNodosCasita(casita, (15,14), DERECHA)
-        
+
         self.pacman = Pacman(self.nodos.getNododesdeCasillas(15,26))
         self.bolitas = GrupoBolitas("laberinto.txt")
         self.fantasmas = GrupoFantasma(self.nodos.getIniciarNodoTemp(), self.pacman)
@@ -145,6 +145,7 @@ class ControladorJuego(object):
                     fantasma.visibilidad = False
                     self.actualizarPuntaje(fantasma.puntos)
                     self.grupotexto.insertarTexto(str(fantasma.puntos), BLANCO, fantasma.posicion.x, fantasma.posicion.y, 8, tiempo=1)
+                    pygame.mixer.Sound("Recursos/Audio/comerFantasma.wav").play()
                     self.fantasmas.actualizarPuntos()
                     self.pausador.setPausa(tiempoPausa=1, func=self.mostrarEntidades)
                     fantasma.iniciarSpawn()
@@ -185,6 +186,7 @@ class ControladorJuego(object):
         if bolitas:
             self.bolitas.numComidas += 1
             self.actualizarPuntaje(bolitas.puntos)
+            pygame.mixer.Sound("Recursos/Audio/comer.mp3").play()
             if self.bolitas.numComidas == 30:
                 self.fantasmas.inky.nodoInicial.accesoPermitido(DERECHA, self.fantasmas.inky)
             if self.bolitas.numComidas == 70:
@@ -214,8 +216,8 @@ class ControladorJuego(object):
                     if self.pacman.vivo:
                         self.pausador.setPausa(jugadorPauso=True)
                         if not self.pausador.pausado:
-                         self.grupotexto.textoOculto()
-                         self.mostrarEntidades()
+                            self.grupotexto.textoOculto()
+                            self.mostrarEntidades()
                         else:
                             self.grupotexto.mostrarTexto(PAUSATXT)
                            # self.esconderEntidades()
@@ -235,8 +237,8 @@ class ControladorJuego(object):
             self.pantalla.blit(self.vidasPacman.imagenes[i], (x, y))
 
         for i in range(len(self.capturarFruta)):
-            x = ANCHOPANTALLA - self.capturarFruta1[i].get_ancho() * (i+1)
-            y = ALTOPANTALLA - self.capturarFruta[i].get_alto()
+            x = ANCHOPANTALLA - self.capturarFruta1[i].get_width() * (i+1)
+            y = ALTOPANTALLA - self.capturarFruta[i].get_height()
             self.pantalla.blit(self.capturarFruta[i], (x, y))
 
         pygame.display.update()

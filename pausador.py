@@ -18,7 +18,7 @@ class Pausador(object):
     def setPausa(self, jugadorPauso = False, tiempoPausa = None, func = None):
         self.timer = 0
         self.func = func
-        self.timepo = tiempoPausa
+        self.tiempoPausa = tiempoPausa
         self.cambiar()
 
     def cambiar(self):
