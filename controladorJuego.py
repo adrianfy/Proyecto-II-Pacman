@@ -154,6 +154,7 @@ class ControladorJuego(object):
                     if self.pacman.vivo:
                         self.vidas -= 1
                         self.vidasPacman.removerImagen()
+                        pygame.mixer.Sound("Recursos/Audio/muerte.mp3").play()
                         self.pacman.muerto()
                         self.fantasmas.esconderse()
                         if self.vidas <= 0:
@@ -169,6 +170,7 @@ class ControladorJuego(object):
         if self.fruta is not None:
             if self.pacman.verColision(self.fruta):
                 self.actualizarPuntaje(self.fruta.puntaje)
+                pygame.mixer.Sound("Recursos/Audio/comerFruta.wav").play()
                 self.grupotexto.insertarTexto(str(self.fruta.puntaje), BLANCO, self.fruta.posicion.x, self.fruta.posicion.y, 8, tiempo=1)
                 capturarFruta = False
                 for fruta in self.capturarFruta:
@@ -237,7 +239,7 @@ class ControladorJuego(object):
             self.pantalla.blit(self.vidasPacman.imagenes[i], (x, y))
 
         for i in range(len(self.capturarFruta)):
-            x = ANCHOPANTALLA - self.capturarFruta1[i].get_width() * (i+1)
+            x = ANCHOPANTALLA - self.capturarFruta[i].get_width() * (i+1)
             y = ALTOPANTALLA - self.capturarFruta[i].get_height()
             self.pantalla.blit(self.capturarFruta[i], (x, y))
 
