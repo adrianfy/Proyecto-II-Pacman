@@ -2,6 +2,21 @@ import pygame
 from vector import Vector
 from constantes import *
 import numpy as np
+import config
+
+factor_reduccion = 0.6  # Reducir al 80% de su tamaño original
+nuevo_ancho_ranchita = int(ANCHOCASILLA * factor_reduccion)
+nuevo_alto_ranchita = int(ALTOCASILLA * factor_reduccion)
+
+ranchita = pygame.image.load("Recursos/Bolitas/Ranchita.png")
+ranchita = pygame.transform.scale(ranchita, (nuevo_ancho_ranchita, nuevo_alto_ranchita))
+
+factor_aumento = 1.6  # Aumentar al 180% de su tamaño original
+nuevo_ancho_carlsberg = int(ANCHOCASILLA * factor_aumento)
+nuevo_alto_carlsberg = int(ALTOCASILLA * factor_aumento)
+
+carlsberg = pygame.image.load("Recursos/Bolitas/Carlsberg.png")
+carlsberg = pygame.transform.scale(carlsberg, (nuevo_ancho_carlsberg, nuevo_alto_carlsberg))
 
 class Bolitas(object):
     def __init__(self, fila, columna):
@@ -12,12 +27,19 @@ class Bolitas(object):
         self.radioColision = int(2*ANCHOCASILLA / 16)
         self.puntos = 10
         self.visibilidad = True
+        self.sprite = ranchita
 
     def renderizar(self, pantalla):
         if self.visibilidad:
             ajustar = Vector(ANCHOCASILLA, ALTOCASILLA) / 2
             p = self.posicion + ajustar
-            pygame.draw.circle(pantalla, self.color, p.coordenadaInt(), self.radio)
+            if config.modoDeJuego == "Clasico":
+                pygame.draw.circle(pantalla, self.color, p.coordenadaInt(), self.radio)
+            else:
+                ajuste_x = (nuevo_ancho_ranchita - ANCHOCASILLA) // 2
+                ajuste_y = (nuevo_alto_ranchita - ALTOCASILLA) // 2
+                posicion_ajustada = (self.posicion.x - ajuste_x, self.posicion.y - ajuste_y)
+                pantalla.blit(self.sprite, posicion_ajustada)
 
 class BolitaGrande(Bolitas):
     def __init__(self, fila, columna):
@@ -27,12 +49,25 @@ class BolitaGrande(Bolitas):
         self.puntos = 50
         self.parpadeo = 0.2
         self.timer = 0
+        self.sprite = carlsberg
 
     def actualizar(self, dt):
         self.timer += dt
         if self.timer >= self.parpadeo:
             self.visibilidad = not self.visibilidad
             self.timer = 0
+    
+    def renderizar(self, pantalla):
+        if self.visibilidad:
+            ajustar = Vector(ANCHOCASILLA, ALTOCASILLA) / 2
+            p = self.posicion + ajustar
+            if config.modoDeJuego == "Clasico":
+                pygame.draw.circle(pantalla, self.color, p.coordenadaInt(), self.radio)
+            else:
+                ajuste_x = (nuevo_ancho_carlsberg - ANCHOCASILLA) // 2
+                ajuste_y = (nuevo_alto_carlsberg - ALTOCASILLA) // 2
+                posicion_ajustada = (self.posicion.x - ajuste_x, self.posicion.y - ajuste_y)
+                pantalla.blit(self.sprite, posicion_ajustada)
 
 class GrupoBolitas(object):
     def __init__(self, archivobolita):
