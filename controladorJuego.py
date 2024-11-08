@@ -41,7 +41,6 @@ class ControladorJuego(object):
         self.fantasmas.reiniciar()
         self.fruta = None
         self.grupotexto.mostrarTexto(INICIOTXT)
-        self.capturarFruta = []
 
     def reiniciarNivel(self):
         self.vidas = 5
@@ -53,6 +52,7 @@ class ControladorJuego(object):
         self.grupotexto.actualizarNivel(self.nivel)
         self.grupotexto.actualizarTexto(INICIOTXT)
         self.vidasPacman.reiniciarVidas(self.vidas)
+        self.capturarFruta = []
     
     def siguienteNivel(self):
         self.mostrarEntidades()
@@ -201,6 +201,7 @@ class ControladorJuego(object):
                 self.fantasmas.clyde.nodoInicial.accesoPermitido(IZQUIERDA, self.fantasmas.clyde)
             self.bolitas.listaBolitas.remove(bolitas)
             if bolitas.nombre == BOLITAGRANDE:
+                pygame.mixer.Sound("Recursos/Audio/BolitaGrande1.mp3").play() if config.modoDeJuego == "Clasico" else pygame.mixer.Sound("Recursos/Audio/BolitaGrande2.mp3").play()
                 self.fantasmas.iniciarSusto()
             if self.bolitas.isEmpty():
                 self.flashBG = True
@@ -229,10 +230,13 @@ class ControladorJuego(object):
                         else:
                             self.grupotexto.mostrarTexto(PAUSATXT)
                            # self.esconderEntidades()
-                elif evento.key == K_ESCAPE:
-                    self.pausador.pausado = True
-                    self.grupotexto.mostrarTexto(PAUSATXT)
-                    self.mostrarMenuPausa()
+                # elif evento.key == K_ESCAPE:
+                #     self.pausador.pausado = True
+                #     self.grupotexto.mostrarTexto(PAUSATXT)
+                #     self.mostrarMenuPausa()
+    
+    def mostrarMenuPausa(self):
+        self.grupotexto.insertarTexto()
 
     def renderizar(self):
         self.pantalla.blit(self.fondopantalla, (0,0))
