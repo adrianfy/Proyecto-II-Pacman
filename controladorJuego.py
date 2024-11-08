@@ -10,6 +10,7 @@ from pausador import Pausador
 from texto import GrupoTexto
 from sprites import vidasPacman
 from sprites import laberintoSprites
+import config
 
 class ControladorJuego(object):
     def __init__(self, modo_juego="Clasico"):
@@ -32,6 +33,7 @@ class ControladorJuego(object):
         self.capturarFruta = []
         self.nodoFruta = None
         self.modo_juego = modo_juego
+        self.menu_pausa = False 
 
     def restaurarJuego(self):
         self.pausador.pausado = True
@@ -57,6 +59,10 @@ class ControladorJuego(object):
         self.nivel += 1
         self.pausador.pausado = True
         self.iniciarJuego()
+        self.fantasmas.inky.velocidad += 1
+        self.fantasmas.clyde.velocidad += 1
+        self.fantasmas.blinky.velocidad += 1
+        self.fantasmas.pinky.velocidad += 1
         self.grupotexto.actualizarNivel(self.nivel)
 
     def setFondopantalla(self):
@@ -154,8 +160,8 @@ class ControladorJuego(object):
                     if self.pacman.vivo:
                         self.vidas -= 1
                         self.vidasPacman.removerImagen()
-                        pygame.mixer.Sound("Recursos/Audio/muerte.mp3").play()
                         self.pacman.muerto()
+                        pygame.mixer.Sound("Recursos/Audio/muerte.mp3").play()  if config.modoDeJuego == "Clasico" else pygame.mixer.Sound("Recursos/Audio/muerteMondevil.mp3").play()
                         self.fantasmas.esconderse()
                         if self.vidas <= 0:
                             self.grupotexto.mostrarTexto(GAMEOVERTXT)
@@ -223,6 +229,10 @@ class ControladorJuego(object):
                         else:
                             self.grupotexto.mostrarTexto(PAUSATXT)
                            # self.esconderEntidades()
+                elif evento.key == K_ESCAPE:
+                    self.pausador.pausado = True
+                    self.grupotexto.mostrarTexto(PAUSATXT)
+                    self.mostrarMenuPausa()
 
     def renderizar(self):
         self.pantalla.blit(self.fondopantalla, (0,0))
