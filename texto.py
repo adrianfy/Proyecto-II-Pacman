@@ -3,12 +3,12 @@ from vector import Vector
 from constantes import *
 
 class Texto(object):
-    def __init__(self, texto, color, x, y, tamanno, tiempo=None, id=None, visbilidad=True):
+    def __init__(self, texto, color, x, y, tamanno, tiempo=None, id=None, visibilidad=True):
         self.id = id
         self.texto = texto
         self.color = color
         self.tamanno = tamanno
-        self.visbilidad = visbilidad
+        self.visibilidad = visibilidad
         self.posicion = Vector(x, y)
         self.timer = 0
         self.tiempodevida = tiempo
@@ -36,7 +36,7 @@ class Texto(object):
                 self.destruir = True
 
     def renderizar(self, pantalla):
-        if self.visbilidad:
+        if self.visibilidad:
             x, y = self.posicion.coordenadaTupla()
             pantalla.blit(self.tag, (x, y))
 
@@ -60,9 +60,9 @@ class GrupoTexto(object):
         tamanno = ALTOCASILLA
         self.todoeltexto[PUNTAJETXT] = Texto("0".zfill(8), BLANCO, 0, ALTOCASILLA, tamanno)
         self.todoeltexto[NIVELTXT] = Texto(str(1).zfill(3), BLANCO, 23*ANCHOCASILLA, ALTOCASILLA, tamanno)
-        self.todoeltexto[INICIOTXT] = Texto("READY!", AMARILLO, 11.25*ANCHOCASILLA, 20*ALTOCASILLA, tamanno, visbilidad=False)
-        self.todoeltexto[PAUSATXT] = Texto("PAUSA!", AMARILLO, 10.625*ANCHOCASILLA, 20*ALTOCASILLA, tamanno, visbilidad=False)
-        self.todoeltexto[GAMEOVERTXT] = Texto("GAMEOVER!", AMARILLO, 10*ANCHOCASILLA, 20*ALTOCASILLA, tamanno, visbilidad=False)
+        self.todoeltexto[INICIOTXT] = Texto("LISTO?", AMARILLO, 11.25*ANCHOCASILLA, 20*ALTOCASILLA, tamanno, visibilidad=False)
+        self.todoeltexto[PAUSATXT] = Texto("PAUSA!", AMARILLO, 10.625*ANCHOCASILLA, 20*ALTOCASILLA, tamanno, visibilidad=False)
+        self.todoeltexto[GAMEOVERTXT] = Texto("GAME OVER", AMARILLO, 10*ANCHOCASILLA, 20*ALTOCASILLA, tamanno, visibilidad=False)
         self.insertarTexto("PUNTAJE", BLANCO, 0, 0, tamanno)
         self.insertarTexto("NIVEL", BLANCO, 23*ANCHOCASILLA, 0, tamanno)
 

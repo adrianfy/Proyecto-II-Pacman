@@ -58,7 +58,3 @@ class ModoControlador(object):
             self.actual = ASUSTADO
         elif self.actual is ASUSTADO:
             self.timer = 0
-
-
-
-

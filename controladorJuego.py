@@ -50,7 +50,7 @@ class ControladorJuego(object):
         self.puntaje = 0
         self.grupotexto.actualizarPuntaje(self.puntaje)
         self.grupotexto.actualizarNivel(self.nivel)
-        self.grupotexto.actualizarTexto(INICIOTXT)
+        self.grupotexto.mostrarTexto(INICIOTXT)
         self.vidasPacman.reiniciarVidas(self.vidas)
         self.capturarFruta = []
     
@@ -230,13 +230,7 @@ class ControladorJuego(object):
                         else:
                             self.grupotexto.mostrarTexto(PAUSATXT)
                            # self.esconderEntidades()
-                # elif evento.key == K_ESCAPE:
-                #     self.pausador.pausado = True
-                #     self.grupotexto.mostrarTexto(PAUSATXT)
-                #     self.mostrarMenuPausa()
-    
-    def mostrarMenuPausa(self):
-        self.grupotexto.insertarTexto()
+
 
     def renderizar(self):
         self.pantalla.blit(self.fondopantalla, (0,0))
