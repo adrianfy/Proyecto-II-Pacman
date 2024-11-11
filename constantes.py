@@ -1,3 +1,5 @@
+# Este Archivo contiene las constantes que se utilizan en el juego para no estar repitiendo codigo y poder configurar ciertas cosas de manera mas rapidas y sencilla.
+
 ANCHOCASILLA = 16
 ALTOCASILLA = 16
 FILA = 36
