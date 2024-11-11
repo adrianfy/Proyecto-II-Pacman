@@ -12,6 +12,7 @@ from sprites import vidasPacman
 from sprites import laberintoSprites
 import config
 
+#Esta clase se encarga de controlar el juego, es decir, de actualizar y renderizar las entidades del juego
 class ControladorJuego(object):
     def __init__(self, modo_juego="Clasico"):
         pygame.init()
@@ -35,14 +36,14 @@ class ControladorJuego(object):
         self.modo_juego = modo_juego
         self.menu_pausa = False 
 
-    def restaurarJuego(self):
+    def restaurarJuego(self):#Reinicia el juego despues de que pacman muere
         self.pausador.pausado = True
         self.pacman.reiniciar()
         self.fantasmas.reiniciar()
         self.fruta = None
         self.grupotexto.mostrarTexto(INICIOTXT)
 
-    def reiniciarNivel(self):
+    def reiniciarNivel(self):#Reinicia el nivel despues de que pacman pierde todas sus vidas
         self.vidas = 5
         self.nivel = 0
         self.pausador.pausado = True
@@ -54,7 +55,7 @@ class ControladorJuego(object):
         self.vidasPacman.reiniciarVidas(self.vidas)
         self.capturarFruta = []
     
-    def siguienteNivel(self):
+    def siguienteNivel(self):#Pasa al siguiente nivel
         self.mostrarEntidades()
         self.nivel += 1
         self.pausador.pausado = True
@@ -65,7 +66,7 @@ class ControladorJuego(object):
         self.fantasmas.pinky.velocidad += 1
         self.grupotexto.actualizarNivel(self.nivel)
 
-    def setFondopantalla(self):
+    def setFondopantalla(self):#Crea el fondo del juego
         self.fondopantalla_normal = pygame.surface.Surface(TAMANNOPANTALLA).convert()
         self.fondopantalla_normal.fill(NEGRO)
         self.fondopantalla_flash = pygame.surface.Surface(TAMANNOPANTALLA).convert()
@@ -75,7 +76,7 @@ class ControladorJuego(object):
         self.flashBG = False
         self.fondopantalla = self.fondopantalla_normal
 
-    def iniciarJuego(self):
+    def iniciarJuego(self):#Inicia el juego con un lsberinto de nodos para bucar camunos de fantasmas
         self.spriteLaberinto = laberintoSprites("laberinto.txt", "rotacionLaberinto.txt")
         self.setFondopantalla()
         self.nodos = GrupoNodos("laberinto.txt")
@@ -106,7 +107,7 @@ class ControladorJuego(object):
         self.nodos.denegarAcessoLista(15, 26, ARRIBA, self.fantasmas)
         
 
-    def actualizar(self):
+    def actualizar(self):#Actualiza el juego y sus entidades
         dt = self.reloj.tick(30) / 1000.0
         self.grupotexto.actualizar(dt)
         self.bolitas.actualizar(dt)
@@ -143,7 +144,7 @@ class ControladorJuego(object):
         self.puntaje += puntos
         self.grupotexto.actualizarPuntaje(self.puntaje)
 
-    def verEventoFantasmas(self):
+    def verEventoFantasmas(self):#Verifica si pacman colisiona con un fantasma
         for fantasma in self.fantasmas:
             if self.pacman.colisionFantasma(fantasma):
                 if fantasma.modo.actual is ASUSTADO:
@@ -169,7 +170,7 @@ class ControladorJuego(object):
                         else:
                             self.pausador.setPausa(tiempoPausa=3, func=self.restaurarJuego)
 
-    def verEventoFruta(self):
+    def verEventoFruta(self):#Verifica si pacman se come las frutas
         if self.bolitas.numComidas == 50 or self.bolitas.numComidas == 140:
             if self.fruta is None:
                 self.fruta = Fruta(self.nodos.getNododesdeCasillas(9,20), self.nivel)
@@ -189,7 +190,7 @@ class ControladorJuego(object):
             elif self.fruta.desaparecer:
                 self.fruta = None
 
-    def verEventoBolitas(self):
+    def verEventoBolitas(self):#Verifica si pacman se come una bolita
         bolitas = self.pacman.bolitasComidas(self.bolitas.listaBolitas)
         if bolitas:
             self.bolitas.numComidas += 1
@@ -214,15 +215,15 @@ class ControladorJuego(object):
                 self.esconderEntidades()
                 self.pausador.setPausa(tiempoPausa=3, func=self.siguienteNivel)
 
-    def mostrarEntidades(self):
+    def mostrarEntidades(self):#Muestra las entidades del juego
         self.pacman.visibilidad = True
         self.fantasmas.mostrarse()
 
-    def esconderEntidades(self):
+    def esconderEntidades(self):#Esconde las entidades del juego
         self.pacman.visibilidad = False
         self.fantasmas.esconderse()
 
-    def verEventos(self):
+    def verEventos(self):#Verifica los eventos del juego
         for evento in pygame.event.get():
             if evento.type == QUIT:
                 exit()
