@@ -201,9 +201,13 @@ class ControladorJuego(object):
                 self.fantasmas.clyde.nodoInicial.accesoPermitido(IZQUIERDA, self.fantasmas.clyde)
             self.bolitas.listaBolitas.remove(bolitas)
             if bolitas.nombre == BOLITAGRANDE:
-                pygame.mixer.Sound("Recursos/Audio/BolitaGrande1.mp3").play() if config.modoDeJuego == "Clasico" else pygame.mixer.Sound("Recursos/Audio/BolitaGrande2.mp3").play()
+                if config.modoDeJuego == "El Tigre":
+                    pygame.mixer.Sound("Recursos/Audio/BolitaGrande1.mp3").stop() 
+                    pygame.mixer.Sound("Recursos/Audio/BolitaGrande1.mp3").play() 
                 self.fantasmas.iniciarSusto()
             if self.bolitas.isEmpty():
+                if config.modoDeJuego == "El Tigre":
+                    pygame.mixer.Sound("Recursos/Audio/Adiccion[Ganar].mp3").play()
                 self.flashBG = True
                 self.esconderEntidades()
                 self.pausador.setPausa(tiempoPausa=3, func=self.siguienteNivel)
