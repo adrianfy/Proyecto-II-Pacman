@@ -206,7 +206,9 @@ class ControladorJuego(object):
                     pygame.mixer.Sound("Recursos/Audio/BolitaGrande1.mp3").play() 
                 self.fantasmas.iniciarSusto()
             if self.bolitas.isEmpty():
-                if config.modoDeJuego == "El Tigre":
+                if config.modoDeJuego == "Clasico":
+                    pygame.mixer.Sound("Recursos/Audio/pacman_intermission.wav").play()
+                else:
                     pygame.mixer.Sound("Recursos/Audio/Adiccion[Ganar].mp3").play()
                 self.flashBG = True
                 self.esconderEntidades()
@@ -257,8 +259,3 @@ class ControladorJuego(object):
 
         pygame.display.update()
 
-# if __name__ == "__main__":
-#     juego = ControladorJuego()
-#     juego.iniciarJuego()
-#     while True:
-#         juego.actualizar()
