@@ -1,50 +1,57 @@
 import math
 
+# Durante la creacion de esta clase nos dimos cuenta que existen metodos propios de python definidos por guiones bajos (__nombre__)
+# estos metodos son llamados metodos especiales y son utilizados para definir comportamientos especiales de los objetos, por ejemplo
+# __add__, __sub__, __mul__, __div__, __truediv__, __neg__, __eq__, __str__, etc.
+
 class Vector (object):
     def __init__(self,x = 0, y = 0):
         self.x = x
         self.y = y
         self.thresh = 0.000001
 
-    # Suma
+    # Suma de vectores
     def __add__(self, other):
         return Vector(self.x + other.x,self.y + other.y)
     
-    # Resta
+    # Resta de vectores
     def __sub__(self, other):
         return Vector(self.x - other.x,self.y - other.y)
     
-    # Negacion
+    # Negacion de vectores
     def __neg__(self):
         return Vector(-self.x, -self.y)
 
-    # Multiplicacion
+    # Multiplicacion de vectores
     def __mul__(self, scalar):
         return Vector(self.x * scalar, self.y * scalar)
     
-    # Divison
+    # Divison de vectores
     def __div__(self,scalar):
         if scalar !=0:
             return Vector(self.x / float(scalar), self.y / float(scalar))
         return None
     
-    # Divison Real
+    # Divison Real de vectores
     def __truediv__(self,scalar):
         return self.__div__(scalar)
     
-    # Igualdad
+    # Igualdad de vectores
     def __eq__(self,other):
         if abs(self.x - other.x) < self.thresh:
             if abs(self.y - other.y) < self.thresh:
                 return True
         return False
 
+    # Diferencia de vectores
     def magnitudCuadrados(self):
         return self.x**2 + self.y**2
     
+    # Magnitud de vectores
     def magnitud(self):
         return math.sqrt(self.magnitudCuadrados())
     
+    # Una copia del Vector
     def copia(self):
         return Vector(self.x, self.y)
     

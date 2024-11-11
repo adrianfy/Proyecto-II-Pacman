@@ -1,3 +1,4 @@
+# Clase para pausar el juego, es bastante importante para animaciones a la hora de que PAcman come los fantasmas o muere, tambien al pasar el nivel y generar ciertas animaciones en el mismo.
 class Pausador(object):
     def __init__(self, pausado = False):
         self.pausado = pausado
