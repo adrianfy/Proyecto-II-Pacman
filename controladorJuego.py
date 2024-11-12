@@ -264,35 +264,15 @@ class ControladorJuego(object):
             json.dump(my_dict, file, indent=4, cls=CustomEncoder)
 
     def cargarPartida(self):
-
-        #self.restaurarJuego()
-
-        with open("PartidaPacman.json", "r") as file:
-            data = json.load(file)
-            self.puntaje = data["puntaje"]
-            self.nivel = data["nivel"]
-            self.vidas = data["vidas"]
-            return GrupoBolitas.from_dict(data["bolitas"])
-
-
-    # def guardarPartida(self):
-    #     data = {
-    #         "puntaje": self.puntaje,
-    #         "nivel": self.nivel,
-    #         "vidas": self.vidas,
-    #         "bolitas": {
-    #             "bolitasPeque": self.bolitas.listaBolitas,
-    #             "bolitasGrandes": self.bolitas.bolitaGrande,
-    #             "numComidas": self.bolitas.numComidas,
-    #         }
-    #     }
-    #     with open("PartidaPacman.pkl", "wb") as file:
-    #         pickle.dump(data, file)
-
-    # def cargarPartida(self):
-    #     with open("PartidaPacman.pkl", "rb") as file:
-    #         data = pickle.load(file)
-    #         print(data)
+        try:
+            with open("PartidaPacman.json", "r") as file:
+                data = json.load(file)
+                self.puntaje = data["puntaje"]
+                self.nivel = data["nivel"]
+                self.vidas = data["vidas"]
+                return GrupoBolitas.from_dict(data["bolitas"])
+        except: 
+            return None
 
 
     def renderizar(self, vidas=None):
