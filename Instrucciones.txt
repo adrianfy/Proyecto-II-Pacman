@@ -1,7 +1,11 @@
-Instrucciones
+Instrucciones para correr el programa:
+ El programa de desarrollo en Visual Studio Code por Adrian Fernandez Yannarella e Isella Rios Sanabria, se requiere de pip, pygames y de
+numpy (pip install -r requirements.txt) para compilar el programa, el archivo principal es main.py quien abre el menu inicial.
+
+Instrucciones dentro del  juego
 1.	Al momento de iniciar se nos muestra un menú, que contiene las siguientes opciones:” Jugar”, “Modo de juego”, “Silenciar música”, “Salir”.
-2.	Luego para poder movilizarse usaremos las teclas W: arriba, S: abajo, A: izquierda, D: derecha y para seleccionar Enter.
-3.	En una de las opciones se encuentra “Silenciar música”, presionando la tecla ‘Enter’ podremos quitar la música.
+2.	Luego para poder movilizarse usaremos las teclas W: arriba, S: abajo, A: izquierda, D: derecha o las flechas del teclado y para seleccionar Enter.
+3.	En una de las opciones se encuentra “Silenciar música”, presionando la tecla ‘Enter’ podremos alternar entre la música activada o desactivada.
 4.	Al movilizarse por el menú tenemos dos modos de juego, por defecto el “Clásico” y si se presiona la tecla ‘Enter’ está el modo “El tigre”. 
 5.	Ya seleccionado el modo, podemos posicionarnos en ‘Jugar’ y empezar el juego.
 6.	Ya dentro del juego debemos dar clic a la tecla de ‘Espacio’ para que así empiece el juego.

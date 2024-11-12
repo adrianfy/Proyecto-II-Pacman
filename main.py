@@ -1,3 +1,6 @@
+# Estudiantes: Adrian Fernandez Yannarella 402460751. 
+#              Isella Rios Sanabria 118920882.
+
 import pygame
 import sys
 from constantes import *
