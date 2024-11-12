@@ -1,6 +1,8 @@
 # Estudiantes: Adrian Fernandez Yannarella 402460751. 
 #              Isella Rios Sanabria 118920882.
 
+# Durante la elaboracion de este proyecto se tomo como referencia la pagina de https://pacmancode.com/ y la ayuda de Github Copilot 
+
 import pygame
 import sys
 from constantes import *
@@ -20,7 +22,7 @@ pygame.display.set_caption("Pacman Menu")
 
 fuente = pygame.font.Font('Recursos/Fuentes/PressStart2P-Regular.ttf', 20)
 
-opcionesMenu = ["Jugar", "Modo de Juego: Clasico", "Silenciar musica: no","Salir"]
+opcionesMenu = ["Jugar", "Continuar", "Modo de Juego: Clasico", "Silenciar musica: no", "Salir"]
 opcionSeleccionada = 0
 musica_Activada = True
 
@@ -31,7 +33,7 @@ imagenTituloTigre = pygame.transform.scale(imagenTituloTigre, (400, 150))
 imagenTitulo = imagenTituloClasico
 
 # Musica
-pygame.mixer.music.load('Recursos/Audio/PacmanMenu.mp3') 
+pygame.mixer.music.load('Recursos/Audio/PacmanMenu.mp3')
 pygame.mixer.music.play(-1)  # -1 para que la musica se reproduzca en bucle
 
 def cambiarModoDeJuego():
@@ -49,16 +51,16 @@ def cambiarModoDeJuego():
          pygame.mixer.music.load('Recursos/Audio/PacmanMenu.mp3')
          pygame.mixer.music.play(-1)
 
-opcionesMenu[1] = f"Modo de Juego: {config.modoDeJuego}"
+opcionesMenu[2] = f"Modo de Juego: {config.modoDeJuego}"
 
 def silenciar():
     global musica_Activada
     if musica_Activada:
         pygame.mixer.music.pause()
-        opcionesMenu[2] = "Silenciar musica: si" 
+        opcionesMenu[3] = "Silenciar musica: si" 
     else:
         pygame.mixer.music.unpause()
-        opcionesMenu[2] = "Silenciar musica: no"
+        opcionesMenu[3] = "Silenciar musica: no"
     musica_Activada = not musica_Activada    
 
 def menu():
@@ -70,18 +72,15 @@ def menu():
     for i, opcion in enumerate(opcionesMenu):
         color = AMARILLO if i == opcionSeleccionada else BLANCO
         textoSuperficie = fuente.render(opcion, True, color)
-
         textoRect = textoSuperficie.get_rect(center=(pantalla.get_width() // 2, 300 + i * 50))
         pantalla.blit(textoSuperficie, textoRect)
     
     pygame.display.flip()
 
 
-pausado = False
-
 def menuPrincipal():
     juego = ControladorJuego()
-    global opcionSeleccionada, pausado
+    global opcionSeleccionada
     jugando = True
 
     while jugando:
@@ -101,12 +100,14 @@ def menuPrincipal():
                         juego.iniciarJuego()
                         while True:
                             juego.actualizar()
-                    elif opcionSeleccionada == 1:
+                    elif opcionSeleccionada == 1:  # Continuar
+                        pass  # La funcionalidad de cargar se implementará en otra clase
+                    elif opcionSeleccionada == 2:  # Modo de Juego
                         cambiarModoDeJuego()
-                        opcionesMenu[1] = f"Modo de Juego: {config.modoDeJuego}"
-                    elif opcionSeleccionada == 2:
+                        opcionesMenu[2] = f"Modo de Juego: {config.modoDeJuego}"
+                    elif opcionSeleccionada == 3:  # Silenciar Musica
                         silenciar()
-                    elif opcionSeleccionada == 3:
+                    elif opcionSeleccionada == 4:  # Salir
                         pygame.quit()
                         sys.exit()
                         

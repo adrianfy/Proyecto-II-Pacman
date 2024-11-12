@@ -40,7 +40,7 @@ class ControladorJuego(object):
         self.modo_juego = modo_juego
         self.menu_pausa = False 
 
-    def restaurarJuego(self):#Reinicia el juego despues de que pacman muere
+    def restaurarJuego(self):#Restaura el juego despues de que pacman muere
         self.pausador.pausado = True
         self.pacman.reiniciar()
         self.fantasmas.reiniciar()
@@ -52,6 +52,7 @@ class ControladorJuego(object):
         self.nivel = 0
         self.pausador.pausado = True
         self.fruta = None
+        self.iniciarJuego()
         self.puntaje = 0
         self.grupotexto.actualizarPuntaje(self.puntaje)
         self.grupotexto.actualizarNivel(self.nivel)
@@ -80,7 +81,11 @@ class ControladorJuego(object):
         self.flashBG = False
         self.fondopantalla = self.fondopantalla_normal
 
-    def iniciarJuego(self):#Inicia el juego con un lsberinto de nodos para bucar camunos de fantasmas
+    def iniciarJuego(self):#Inicia el juego con un laberinto de nodos para buscar caminos de fantasmas
+        if config.modoDeJuego == "El Tigre":
+            pygame.mixer.music.load("Recursos/Audio/Adiccion [Insturmental].mp3")
+            pygame.mixer.music.set_volume(0.2)
+            pygame.mixer.music.play(-1)
         self.spriteLaberinto = laberintoSprites("laberinto.txt", "rotacionLaberinto.txt")
         self.setFondopantalla()
         self.nodos = GrupoNodos("laberinto.txt")
@@ -238,6 +243,7 @@ class ControladorJuego(object):
     def verEventos(self):#Verifica los eventos del juego
         for evento in pygame.event.get():
             if evento.type == QUIT:
+                pygame.sound.stop()
                 exit()
             elif evento.type == KEYDOWN:
                 if evento.key == K_SPACE:
@@ -252,6 +258,8 @@ class ControladorJuego(object):
                 if evento.key == K_g:
                     self.guardarPartida()
 
+    # Las funciones de guardar y cargar en multiplas clases fueron obtenidas desde Github Copilot con
+    # modificaciones para el funcionamiento correcto del programa
     def guardarPartida(self):
         my_dict = {
             "puntaje" : self.puntaje,
@@ -297,6 +305,8 @@ class ControladorJuego(object):
 
         pygame.display.update()
 
+# Se recurrio a ayuda externa como Github Copilot para la creacion de la clase CustomEncoder, solo se modifico para el
+# funcionamiento correcto del programa
 class CustomEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, (GrupoBolitas, Bolitas, BolitaGrande, Vector)):
