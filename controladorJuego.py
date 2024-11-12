@@ -3,7 +3,7 @@ from pygame.locals import *
 from constantes import *
 from pacman import Pacman
 from nodos import GrupoNodos
-from bolitas import GrupoBolitas
+from bolitas import GrupoBolitas, Bolitas, BolitaGrande
 from fantasmas import GrupoFantasma
 from fruta import Fruta
 from pausador import Pausador
@@ -11,6 +11,10 @@ from texto import GrupoTexto
 from sprites import vidasPacman
 from sprites import laberintoSprites
 import config
+import json
+
+from vector import Vector
+#import pickle
 
 #Esta clase se encarga de controlar el juego, es decir, de actualizar y renderizar las entidades del juego
 class ControladorJuego(object):
@@ -86,7 +90,15 @@ class ControladorJuego(object):
         self.nodos.connectarNodosCasita(casita, (15,14), DERECHA)
 
         self.pacman = Pacman(self.nodos.getNododesdeCasillas(15,26))
-        self.bolitas = GrupoBolitas("laberinto.txt")
+        
+        recuperarPartida = self.cargarPartida()
+        if recuperarPartida is not None:
+            self.bolitas = recuperarPartida
+            self.grupotexto.actualizarPuntaje(self.puntaje)
+            self.grupotexto.actualizarNivel(self.nivel)
+            self.bolitas.actualizar(0)
+        else:
+            self.bolitas = GrupoBolitas("laberinto.txt")
         self.fantasmas = GrupoFantasma(self.nodos.getIniciarNodoTemp(), self.pacman)
 
         self.fantasmas.blinky.setNodoInicial(self.nodos.getNododesdeCasillas(2+11.5, 0+14))
@@ -138,7 +150,7 @@ class ControladorJuego(object):
         if despuesdePausar is not None:
             despuesdePausar()
         self.verEventos()
-        self.renderizar()
+        self.renderizar(self.vidas)
     
     def actualizarPuntaje(self, puntos):
         self.puntaje += puntos
@@ -237,9 +249,53 @@ class ControladorJuego(object):
                         else:
                             self.grupotexto.mostrarTexto(PAUSATXT)
                            # self.esconderEntidades()
+                if evento.key == K_g:
+                    self.guardarPartida()
+
+    def guardarPartida(self):
+        my_dict = {
+            "puntaje" : self.puntaje,
+            "nivel" : self.nivel,
+            "vidas" : self.vidas,
+            "bolitas" : {"bolitasPeque" : self.bolitas.listaBolitas, "bolitasGrandes" : self.bolitas.bolitaGrande, "numComidas" : self.bolitas.numComidas},
+
+        }
+        with open("PartidaPacman.json", "w") as file:
+            json.dump(my_dict, file, indent=4, cls=CustomEncoder)
+
+    def cargarPartida(self):
+
+        #self.restaurarJuego()
+
+        with open("PartidaPacman.json", "r") as file:
+            data = json.load(file)
+            self.puntaje = data["puntaje"]
+            self.nivel = data["nivel"]
+            self.vidas = data["vidas"]
+            return GrupoBolitas.from_dict(data["bolitas"])
 
 
-    def renderizar(self):
+    # def guardarPartida(self):
+    #     data = {
+    #         "puntaje": self.puntaje,
+    #         "nivel": self.nivel,
+    #         "vidas": self.vidas,
+    #         "bolitas": {
+    #             "bolitasPeque": self.bolitas.listaBolitas,
+    #             "bolitasGrandes": self.bolitas.bolitaGrande,
+    #             "numComidas": self.bolitas.numComidas,
+    #         }
+    #     }
+    #     with open("PartidaPacman.pkl", "wb") as file:
+    #         pickle.dump(data, file)
+
+    # def cargarPartida(self):
+    #     with open("PartidaPacman.pkl", "rb") as file:
+    #         data = pickle.load(file)
+    #         print(data)
+
+
+    def renderizar(self, vidas=None):
         self.pantalla.blit(self.fondopantalla, (0,0))
         self.bolitas.renderizar(self.pantalla)
         if self.fruta is not None:
@@ -248,7 +304,8 @@ class ControladorJuego(object):
         self.fantasmas.renderizar(self.pantalla)
         self.grupotexto.renderizar(self.pantalla)
 
-        for i in range(len(self.vidasPacman.imagenes)):
+        vidasActuales = len(self.vidasPacman.imagenes) if vidas is None else vidas
+        for i in range(vidasActuales):
             x = self.vidasPacman.imagenes[i].get_width() * i
             y = ALTOPANTALLA - self.vidasPacman.imagenes[i].get_height()
             self.pantalla.blit(self.vidasPacman.imagenes[i], (x, y))
@@ -259,4 +316,10 @@ class ControladorJuego(object):
             self.pantalla.blit(self.capturarFruta[i], (x, y))
 
         pygame.display.update()
+
+class CustomEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, (GrupoBolitas, Bolitas, BolitaGrande, Vector)):
+            return obj.to_dict()
+        return super().default(obj)
 

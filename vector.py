@@ -64,6 +64,18 @@ class Vector (object):
     def __str__(self):
         return "<"+str(self.x)+", "+str(self.y)+">"
     
+    # Metodo que recibe la propia clase y un diccionario, y retorna una nueva instancia de la clase con los valores del diccionario
+    # el @ es un decorador que se utiliza para modificar funciones o metodos
+    @classmethod
+    def from_dict(cls, data):
+        return cls(data["x"], data["y"])
+    
+    def to_dict(self):
+        return {
+            "x": self.x,
+            "y": self.y
+        }
+    
     
 
                             

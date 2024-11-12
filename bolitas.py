@@ -3,6 +3,7 @@ from vector import Vector
 from constantes import *
 import numpy as np
 import config
+import json
 
 # Aqui se hace un ajuste para las imagenes de las bolitas, se reducen o aumentan de tamaño con la finalidad de cambiar
 # su imagen para el modo de juego El Tigre.
@@ -25,15 +26,16 @@ carlsberg = pygame.transform.scale(carlsberg, (nuevo_ancho_carlsberg, nuevo_alto
 
 class Bolitas(object):
     # Inicializa las bolitas con una posicion, color, radio, radio de colision y puntos
-    def __init__(self, fila, columna):
+    def __init__(self, fila, columna, visibilidad=True):
         self.nombre = BOLITA
         self.posicion = Vector(columna*ANCHOCASILLA, fila*ALTOCASILLA)
         self.color = BLANCO
         self.radio = int(2 * ANCHOCASILLA / 16)
         self.radioColision = int(2*ANCHOCASILLA / 16)
         self.puntos = 10
-        self.visibilidad = True
+        self.visibilidad = visibilidad
         self.sprite = ranchita
+
     
     # Actualiza la visibilidad de las bolitas
     def renderizar(self, pantalla):
@@ -49,11 +51,22 @@ class Bolitas(object):
                 posicion_ajustada = (self.posicion.x - ajuste_x, self.posicion.y - ajuste_y)
                 pantalla.blit(self.sprite, posicion_ajustada)
 
+    @classmethod
+    def from_dict(cls, data):
+        bolita = cls(data["posicion"]["x"], data["posicion"]["y"], data["visibilidad"])
+        return bolita
+
+    def to_dict(self):
+        return {
+            "posicion": self.posicion.to_dict(),
+            "visibilidad": self.visibilidad,
+        }
+        
 # Hereda de la clase Bolitas, se encarga de crear las bolitas grandes que su funcion es diferente
 class BolitaGrande(Bolitas):
     # Inicializa las bolitas grandes al igual que la clase bolitas, pero con un radio y puntos diferentes
-    def __init__(self, fila, columna):
-        Bolitas.__init__(self, fila, columna)
+    def __init__(self, fila, columna, visibilidad=True):
+        Bolitas.__init__(self, fila, columna, visibilidad)
         self.nombre = BOLITAGRANDE
         self.radio = int(8 * ANCHOCASILLA / 16)
         self.puntos = 50
@@ -81,14 +94,23 @@ class BolitaGrande(Bolitas):
                 posicion_ajustada = (self.posicion.x - ajuste_x, self.posicion.y - ajuste_y)
                 pantalla.blit(self.sprite, posicion_ajustada)
 
+    @classmethod
+    def from_dict(cls, data):
+        bolitaGrande = cls(data["posicion"]["x"], data["posicion"]["y"], data["visibilidad"])
+        return bolitaGrande
+    
+    def to_dict(self):
+        data = super().to_dict()
+        return data
+
 # La clase GrupoBolitas se encarga de crear un grupo de bolitas y bolitas grandes, ademas de actualizarlas y renderizarlas
 class GrupoBolitas(object):
     # Inicializa el grupo de bolitas y bolitas grandes en una lista, ademas de un contador de comidas para saber cuando se acaba el nivel y se llevar el puntaje
-    def __init__(self, archivobolita):
-        self.listaBolitas = []
-        self.bolitaGrande = []
+    def __init__(self, archivobolita, listaBolitas = [], bolitaGrande = [], numComidas = 0):
+        self.listaBolitas = listaBolitas
+        self.bolitaGrande = bolitaGrande
         self.crearListaBolitas(archivobolita)
-        self.numComidas = 0
+        self.numComidas = numComidas
     
     # Actualiza las bolitas y bolitas grandes
     def actualizar(self, dt):
@@ -121,3 +143,19 @@ class GrupoBolitas(object):
     def renderizar(self, pantalla):
         for bolita in self.listaBolitas:
             bolita.renderizar(pantalla)
+
+    @classmethod
+    def from_dict(cls, data):
+        grupoBolitas = cls("laberinto.txt",
+                           numComidas = data["numComidas"],
+                           listaBolitas = [Bolitas.from_dict(bolita) for bolita in data["bolitasPeque"]],
+                           bolitaGrande = [BolitaGrande.from_dict(bolitaGrande) for bolitaGrande in data["bolitasGrandes"]])
+        return grupoBolitas
+
+
+    def to_dict(self):
+        return{
+            "numComidas": self.numComidas,
+            "listaBolitas": [bolita.to_dict() for bolita in self.listaBolitas],
+            "bolitaGrande": [bolitaGrande.to_dict() for bolitaGrande in self.bolitaGrande]
+        }

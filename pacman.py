@@ -5,7 +5,9 @@ from constantes import *
 from entidad import Entidad
 from sprites import ImagendePacman
 
+# Clase Pacman, se encarga de crear al personaje principal del juego, una bolita amarilla que come bolitas
 class Pacman(Entidad):
+    # Inicializa a Pacman con un nodo
     def __init__(self, nodo):
         Entidad.__init__(self,nodo)
         self.nombre = PACMAN
@@ -15,6 +17,7 @@ class Pacman(Entidad):
         self.vivo = True
         self.sprites = ImagendePacman(self)
 
+    # Reinicia a Pacman
     def reiniciar(self):
         Entidad.reiniciar(self)
         self.direccion = IZQUIERDA
@@ -23,6 +26,7 @@ class Pacman(Entidad):
         self.imagen = self.sprites.getIniciodeImagen()
         self.sprites.reiniciar()
 
+    # Si un fantasma toca a pacman, este se detiene y muere
     def muerto(self):
         self.vivo = False
         self.direccion = DETENER
@@ -30,6 +34,7 @@ class Pacman(Entidad):
     #def setPosicion(self):
       #  self.posicion = self.nodo.posicion.copia()
 
+    # Actualiza a el ciclo de Pacman tanto de movimiento como de animacion, posicion y colisiones
     def actualizar(self, dt):
         self.sprites.actualizar(dt)
         self.posicion += self.direcciones[self.direccion]*self.velocidad*dt
@@ -50,7 +55,7 @@ class Pacman(Entidad):
             if self.direccionOpuesta(direccion):
                 self.direccionInversa()
     
-    # Movmimiento de Pacman segun las teclas
+    # Movmimiento de Pacman segun las teclas, se agrego la opcion de jugar con las flechas o con WASD
     def getTeclaValida(self):
         presionar_Tecla = pygame.key.get_pressed()
         if presionar_Tecla[K_UP] or presionar_Tecla[K_w]:
@@ -63,36 +68,18 @@ class Pacman(Entidad):
             return DERECHA
         return DETENER
     
-   # def objetivoRebasado(self):
-      #  if self.objetivo is not None:
-      #      vec1 = self.objetivo.posicion - self.nodo.posicion
-      #      vec2 = self.posicion - self.nodo.posicion
-       #     nodoAobjetivo = vec1.magnitudCuadrados()
-      #      nodoAself = vec2.magnitudCuadrados()
-       #     return nodoAself >= nodoAobjetivo
-      #  return False
-    
-   # def direccionReversa(self):
-    #    self.direccion *= -1
-    #    temp = self.nodo
-    #    self.nodo = self.objetivo
-     #   self.objetivo = temp
-
-   # def direccionOpuesta(self, direccion):
-   #     if direccion is not DETENER:
-   #         if direccion == self.direccion * -1:
-   #             return True
-   #     return False
-    
+    # Si Pacman colisiona con una bolita, esta desaparece y suma puntos
     def bolitasComidas(self,listaBolitas):
         for bolitas in listaBolitas:
             if self.verColision(bolitas):
                 return bolitas
         return None
     
+    # Revisa la colision con fantasmas
     def colisionFantasma(self, fantasma):
         return self.verColision(fantasma)
     
+    # Revisa las posibles colisiones, esta es en funcion a los radiso de los objetos ya que la mayoria se definen como circulos.
     def verColision(self, otro):
         d = self.posicion - otro.posicion
         dCuadrado = d.magnitudCuadrados()
@@ -100,7 +87,3 @@ class Pacman(Entidad):
         if dCuadrado <= rCuadrado:
             return True
         return False
-
-    # def renderizar(self, pantalla):
-    #     p = self.posicion.coordenadaInt()
-    #     pygame.draw.circle(pantalla, self.color, p, self.radio)

@@ -83,24 +83,12 @@ def menuPrincipal():
 
     while jugando:
         menu()
-
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-
             if evento.type == pygame.KEYDOWN:
-                if evento.key == pygame.K_ESCAPE:
-                    pausado = not pausado  # Cambia el estado de pausa
-                    if pausado:
-                        resultado = menuPausa()
-                        if resultado == "menu_inicial":
-                            return  # Reinicia desde menuPrincipal
-                    else:
-                        pygame.mixer.music.unpause()
-                
-                # Navegación en el menú principal
-                elif evento.key == pygame.K_s:
+                if evento.key == pygame.K_s:
                     opcionSeleccionada = (opcionSeleccionada + 1) % len(opcionesMenu)
                 elif evento.key == pygame.K_w:
                     opcionSeleccionada = (opcionSeleccionada - 1) % len(opcionesMenu)
@@ -109,16 +97,7 @@ def menuPrincipal():
                         pygame.mixer.music.stop()
                         juego.iniciarJuego()
                         while True:
-                            for evento in pygame.event.get():
-                                if evento.type == pygame.QUIT:
-                                    pygame.quit()
-                                    sys.exit()
-                                elif config.pausa == True:
-                                    resultado = menuPausa()
-                                    if resultado == "menu_inicial":
-                                        return
                             juego.actualizar()
-
                     elif opcionSeleccionada == 1:
                         cambiarModoDeJuego()
                         opcionesMenu[1] = f"Modo de Juego: {config.modoDeJuego}"
@@ -127,40 +106,6 @@ def menuPrincipal():
                     elif opcionSeleccionada == 3:
                         pygame.quit()
                         sys.exit()
-
-def menuPausa():
-    opcionesPausa = ["Continuar", "Menu Inicial", "Guardar y Salir"]
-    seleccionPausa = 0
-
-    while True:
-        pantalla.fill(NEGRO)
-        for i, opcion in enumerate(opcionesPausa):
-            color = AMARILLO if i == seleccionPausa else BLANCO
-            textoSuperficie = fuente.render(opcion, True, color)
-            textoRect = textoSuperficie.get_rect(center=(pantalla.get_width() // 2, 200 + i * 50))
-            pantalla.blit(textoSuperficie, textoRect)
-
-        pygame.display.flip()
-
-        for evento in pygame.event.get():
-            if evento.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            elif evento.type == pygame.KEYDOWN:
-                if evento.key == pygame.K_w:
-                    seleccionPausa = (seleccionPausa - 1) % len(opcionesPausa)
-                elif evento.key == pygame.K_s:
-                    seleccionPausa = (seleccionPausa + 1) % len(opcionesPausa)
-                elif evento.key == pygame.K_RETURN:
-                    if seleccionPausa == 0:  # Continuar
-                        return
-                    elif seleccionPausa == 1:  # Menú inicial
-                        menuPrincipal()
-                    elif seleccionPausa == 2:  # Salir
-                        pygame.quit()
-                        sys.exit()
-                elif evento.key == pygame.K_ESCAPE:
-                    return
-
+                        
 if __name__ == "__main__":
     menuPrincipal()

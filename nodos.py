@@ -58,6 +58,8 @@ class GrupoNodos(object):
                 self.nodosLUT[(x, y)] = Nodo(x, y)
     
     # Construye una clave para el diccionario de nodos
+    # Esta retorna un valor unico que representa la posicion de un nodo
+    # FUNCION HASH
     def constructKey(self, x, y):
         return x * ANCHOCASILLA, y * ALTOCASILLA
     
