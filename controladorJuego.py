@@ -215,8 +215,8 @@ class ControladorJuego(object):
             self.bolitas.listaBolitas.remove(bolitas)
             if bolitas.nombre == BOLITAGRANDE:
                 if config.modoDeJuego == "El Tigre":
-                    pygame.mixer.Sound("Recursos/Audio/BolitaGrande1.mp3").stop() 
-                    pygame.mixer.Sound("Recursos/Audio/BolitaGrande1.mp3").play() 
+                    pygame.mixer.Sound("Recursos/Audio/BolitaGrande.mp3").stop() 
+                    pygame.mixer.Sound("Recursos/Audio/BolitaGrande.mp3").play() 
                 self.fantasmas.iniciarSusto()
             if self.bolitas.isEmpty():
                 if config.modoDeJuego == "Clasico":
