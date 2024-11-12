@@ -194,11 +194,11 @@ class ControladorJuego(object):
         if self.fruta is not None:
             if self.pacman.verColision(self.fruta):
                 self.actualizarPuntaje(self.fruta.puntaje)
-                pygame.mixer.Sound("Recursos/Audio/comerFruta.wav").play()
+                pygame.mixer.Sound("Recursos/Audio/comerFruta.wav").play() if config.modoDeJuego == "Clasico" else pygame.mixer.Sound("Recursos/Audio/soda.mp3").play()
                 self.grupotexto.insertarTexto(str(self.fruta.puntaje), BLANCO, self.fruta.posicion.x, self.fruta.posicion.y, 8, tiempo=1)
                 capturarFruta = False
                 for fruta in self.capturarFruta:
-                    if fruta.get_recompensa() == self.fruta.imagen.get_recompensa():
+                    if fruta.get_offset() == self.fruta.imagen.get_offset():
                         capturarFruta = True
                         break
                 if not capturarFruta:

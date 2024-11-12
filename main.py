@@ -2,6 +2,7 @@
 #              Isella Rios Sanabria 118920882.
 
 # Durante la elaboracion de este proyecto se tomo como referencia la pagina de https://pacmancode.com/ y la ayuda de Github Copilot 
+# Link del github: https://github.com/adrianfy/Proyecto-II-Pacman
 
 import pygame
 import sys
